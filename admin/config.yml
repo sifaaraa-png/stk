@@ -185,42 +185,44 @@ collections:
         name: "homepage"
         file: "content/homepage.json"
         fields:
-          - label: "Hero / Slider Alanı"
-            name: "slides"
-            widget: "list"
-            label_singular: "Slayt"
-            max: 5
+          - label: "Hero Bölümü 1"
+            name: "hero"
+            widget: "object"
             fields:
               - { label: "Başlık", name: "title", widget: "string" }
               - { label: "Alt Başlık", name: "subtitle", widget: "text" }
-              - { label: "Buton Metni", name: "button_text", widget: "string", default: "Hizmetlerimizi Keşfedin" }
-              - { label: "Buton Linki", name: "button_link", widget: "string", default: "/hizmetlerimiz.html" }
-              - { label: "Arka Plan Görseli", name: "bg_image", widget: "image", required: false }
+              - { label: "Buton Metni", name: "cta_text", widget: "string" }
+              - { label: "Buton Linki", name: "cta_link", widget: "string" }
 
-          - label: "Öne Çıkan Hizmetler"
-            name: "featured_services"
-            widget: "list"
-            label_singular: "Hizmet"
-            max: 6
-            fields:
-              - { label: "Başlık", name: "title", widget: "string" }
-              - { label: "Açıklama", name: "desc", widget: "text" }
-              - { label: "İkon (FontAwesome)", name: "icon", widget: "string", hint: "Örn: fas fa-building" }
-              - { label: "Link", name: "link", widget: "string" }
-
-          - label: "Neden Biz Bölümü"
-            name: "why_us"
+          - label: "Hero Bölümü 2"
+            name: "hero2"
             widget: "object"
             fields:
-              - { label: "Başlık", name: "title", widget: "string", default: "Neden SH Danışmanlık?" }
-              - label: "Maddeler"
-                name: "items"
-                widget: "list"
-                label_singular: "Madde"
-                fields:
-                  - { label: "Başlık", name: "title", widget: "string" }
-                  - { label: "Açıklama", name: "desc", widget: "text" }
-                  - { label: "İkon", name: "icon", widget: "string" }
+              - { label: "Başlık", name: "title", widget: "string" }
+              - { label: "Alt Başlık", name: "subtitle", widget: "text" }
+              - { label: "Buton Metni", name: "cta_text", widget: "string" }
+              - { label: "Buton Linki", name: "cta_link", widget: "string" }
+
+          - label: "Hero Bölümü 3"
+            name: "hero3"
+            widget: "object"
+            fields:
+              - { label: "Başlık", name: "title", widget: "string" }
+              - { label: "Alt Başlık", name: "subtitle", widget: "text" }
+              - { label: "Buton Metni", name: "cta_text", widget: "string" }
+              - { label: "Buton Linki", name: "cta_link", widget: "string" }
+
+          - label: "İstatistikler"
+            name: "stats"
+            widget: "object"
+            fields:
+              - { label: "Deneyim (Yıl)", name: "experience_years", widget: "string", default: "10" }
+              - { label: "Başarılı Proje", name: "successful_projects", widget: "string", default: "150" }
+              - { label: "Aktif Partner", name: "active_partners", widget: "string", default: "75" }
+              - { label: "Eğitilen Katılımcı", name: "trained_participants", widget: "string", default: "1000" }
+
+          - { label: "Hakkında Kısa Başlık", name: "about_short", widget: "string" }
+          - { label: "Hakkında Metin", name: "about_text", widget: "text" }
 
   # ─────────────────────────────────────────────
   # 5) SİTE AYARLARI
