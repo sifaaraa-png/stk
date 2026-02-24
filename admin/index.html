@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>SH Danışmanlık | Yönetim Paneli</title>
-  <link rel="icon" href="/logo.webp" type="image/webp" />
-
-  <!-- Decap CMS -->
+  <link rel="icon" href="/logo.webp" type="image/webp">
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
   <style>
-    /* ╔══════════════════════════════════════════════╗
-       ║   SH DANIŞMANLIK — MODERN CMS THEME          ║
-       ╚══════════════════════════════════════════════╝ */
-
     :root {
       --sh-primary: #1a237e;
       --sh-primary-light: #3949ab;
       --sh-primary-dark: #0d1542;
       --sh-accent: #00a8e8;
       --sh-accent-light: #4dd0e1;
-      --sh-success: #25d366;
       --sh-bg: #f0f4f8;
       --sh-surface: #ffffff;
       --sh-text: #1e293b;
@@ -33,30 +25,23 @@
       --sh-shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
       --sh-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    /* ── GLOBAL RESET ── */
     * { box-sizing: border-box; }
-
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--sh-bg) !important;
       color: var(--sh-text);
       margin: 0;
     }
-
-    /* ── LOADING SCREEN ── */
+    /* Loading screen */
     #nc-root:empty::before {
       content: '';
       position: fixed;
       inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--sh-primary-dark) 0%, var(--sh-primary) 50%, var(--sh-accent) 100%);
+      background: linear-gradient(135deg, #0d1542 0%, #1a237e 50%, #00a8e8 100%);
       z-index: 99999;
     }
     #nc-root:empty::after {
-      content: 'SH Danışmanlık Yönetim Paneli Yükleniyor...';
+      content: 'SH Danışmanlık — Yönetim Paneli Yükleniyor...';
       position: fixed;
       top: 50%;
       left: 50%;
@@ -68,351 +53,112 @@
       z-index: 100000;
       animation: pulse 1.5s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
-    }
+    @keyframes pulse { 0%,100%{opacity:0.6}50%{opacity:1} }
 
-    /* ── TOP BAR / HEADER ── */
-    [class*="AppHeader"] header,
-    header[class*="Header"] {
-      background: linear-gradient(135deg, var(--sh-primary-dark) 0%, var(--sh-primary) 100%) !important;
-      box-shadow: var(--sh-shadow-lg) !important;
-      border-bottom: 3px solid var(--sh-accent) !important;
+    /* Header */
+    [class*="AppHeader"] header, header[class*="Header"] {
+      background: linear-gradient(135deg, #0d1542 0%, #1a237e 100%) !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+      border-bottom: 3px solid #00a8e8 !important;
       height: 64px !important;
     }
-    [class*="AppHeader"] a,
-    header[class*="Header"] a {
-      color: white !important;
-      font-weight: 600 !important;
-      text-decoration: none !important;
-      transition: var(--sh-transition) !important;
-    }
-    [class*="AppHeader"] a:hover,
-    header[class*="Header"] a:hover {
-      color: var(--sh-accent-light) !important;
-    }
+    [class*="AppHeader"] a, header[class*="Header"] a { color: white !important; font-weight: 600 !important; }
+    [class*="AppHeader"] a:hover, header[class*="Header"] a:hover { color: #4dd0e1 !important; }
 
-    /* ── SIDEBAR ── */
-    [class*="Sidebar"],
-    aside[class*="sidebar"],
-    div[class*="CollectionPane"] {
+    /* Sidebar */
+    [class*="Sidebar"], aside[class*="sidebar"], div[class*="CollectionPane"] {
       background: var(--sh-surface) !important;
       border-right: 1px solid var(--sh-border) !important;
-      box-shadow: var(--sh-shadow-sm) !important;
     }
-    [class*="SidebarNavLink"],
-    [class*="Sidebar"] a,
-    [class*="Sidebar"] li {
-      border-radius: 8px !important;
-      margin: 2px 8px !important;
-      padding: 10px 14px !important;
-      transition: var(--sh-transition) !important;
-      font-weight: 500 !important;
-      color: var(--sh-text) !important;
+    [class*="SidebarNavLink"], [class*="Sidebar"] a, [class*="Sidebar"] li {
+      border-radius: 8px !important; margin: 2px 8px !important; padding: 10px 14px !important;
+      transition: var(--sh-transition) !important; font-weight: 500 !important; color: var(--sh-text) !important;
     }
-    [class*="SidebarNavLink"]:hover,
-    [class*="Sidebar"] a:hover {
-      background: rgba(26, 35, 126, 0.06) !important;
-      color: var(--sh-primary) !important;
+    [class*="SidebarNavLink"]:hover, [class*="Sidebar"] a:hover {
+      background: rgba(26,35,126,0.06) !important; color: var(--sh-primary) !important;
     }
-    [class*="SidebarNavLink"][class*="active"],
-    [class*="Sidebar"] [class*="active"],
-    [class*="Sidebar"] li[class*="selected"] {
-      background: linear-gradient(135deg, var(--sh-primary), var(--sh-primary-light)) !important;
-      color: white !important;
-      box-shadow: 0 2px 8px rgba(26, 35, 126, 0.3) !important;
+    [class*="SidebarNavLink"][class*="active"], [class*="Sidebar"] [class*="active"] {
+      background: linear-gradient(135deg, #1a237e, #3949ab) !important; color: white !important;
+      box-shadow: 0 2px 8px rgba(26,35,126,0.3) !important;
     }
-    [class*="SidebarNavLink"][class*="active"] a,
-    [class*="Sidebar"] [class*="active"] a {
-      color: white !important;
+    [class*="SidebarNavLink"][class*="active"] a, [class*="Sidebar"] [class*="active"] a { color: white !important; }
+
+    /* Entry cards */
+    [class*="ListCard"], [class*="EntryListing"]>div>div, [class*="collection"] [class*="Card"] {
+      background: var(--sh-surface) !important; border: 1px solid var(--sh-border) !important;
+      border-radius: var(--sh-radius) !important; padding: 16px 20px !important; margin-bottom: 8px !important;
+      transition: var(--sh-transition) !important; box-shadow: var(--sh-shadow-sm) !important;
+    }
+    [class*="ListCard"]:hover, [class*="EntryListing"]>div>div:hover {
+      border-color: #00a8e8 !important; box-shadow: var(--sh-shadow-md) !important; transform: translateY(-1px);
     }
 
-    /* ── COLLECTION HEADING ── */
-    [class*="CollectionTop"] h1,
-    [class*="collection"] h1 {
-      font-size: 24px !important;
-      font-weight: 700 !important;
-      color: var(--sh-primary-dark) !important;
+    /* Buttons */
+    button[class*="Button"], [class*="ToolbarButton"], a[class*="Button"] {
+      border-radius: 10px !important; font-weight: 600 !important; padding: 10px 22px !important;
+      transition: var(--sh-transition) !important; text-transform: none !important;
+    }
+    button[class*="Button"][class*="primary"], button[class*="PublishButton"] {
+      background: linear-gradient(135deg, #1a237e, #3949ab) !important; color: white !important;
+      border: none !important; box-shadow: 0 3px 12px rgba(26,35,126,0.25) !important;
+    }
+    a[href*="/new"], [class*="NewEntryButton"] {
+      background: linear-gradient(135deg, #00a8e8, #0288d1) !important; color: white !important;
+      border: none !important; border-radius: 10px !important; font-weight: 600 !important;
+    }
+    button[class*="delete"], button[class*="Delete"] {
+      background: #ef4444 !important; color: white !important; border: none !important; border-radius: 10px !important;
     }
 
-    /* ── ENTRY CARDS / LIST ITEMS ── */
-    [class*="ListCard"],
-    [class*="EntryListing"] > div > div,
-    [class*="collection"] [class*="Card"] {
-      background: var(--sh-surface) !important;
-      border: 1px solid var(--sh-border) !important;
-      border-radius: var(--sh-radius) !important;
-      padding: 16px 20px !important;
-      margin-bottom: 8px !important;
-      transition: var(--sh-transition) !important;
-      box-shadow: var(--sh-shadow-sm) !important;
-    }
-    [class*="ListCard"]:hover,
-    [class*="EntryListing"] > div > div:hover,
-    [class*="collection"] [class*="Card"]:hover {
-      border-color: var(--sh-accent) !important;
-      box-shadow: var(--sh-shadow-md) !important;
-      transform: translateY(-1px);
-    }
-
-    /* ── BUTTONS ── */
-    button[class*="Button"],
-    [class*="ToolbarButton"],
-    a[class*="Button"] {
-      border-radius: 10px !important;
-      font-weight: 600 !important;
-      padding: 10px 22px !important;
-      transition: var(--sh-transition) !important;
-      text-transform: none !important;
-      letter-spacing: 0.3px !important;
-    }
-    /* Primary buttons */
-    button[class*="Button"][class*="primary"],
-    button[class*="PublishButton"],
-    [class*="ToolbarButton"][class*="publish"],
-    div[class*="ToolbarSection"] > button:first-child {
-      background: linear-gradient(135deg, var(--sh-primary), var(--sh-primary-light)) !important;
-      color: white !important;
-      border: none !important;
-      box-shadow: 0 3px 12px rgba(26, 35, 126, 0.25) !important;
-    }
-    button[class*="Button"][class*="primary"]:hover,
-    button[class*="PublishButton"]:hover {
-      box-shadow: 0 5px 20px rgba(26, 35, 126, 0.35) !important;
-      transform: translateY(-1px);
-    }
-    /* New entry button */
-    a[href*="/new"],
-    [class*="NewEntryButton"],
-    [class*="collection"] a[class*="Button"] {
-      background: linear-gradient(135deg, var(--sh-accent), #0288d1) !important;
-      color: white !important;
-      border: none !important;
-      border-radius: 10px !important;
-      box-shadow: 0 3px 12px rgba(0, 168, 232, 0.3) !important;
-      font-weight: 600 !important;
-    }
-    a[href*="/new"]:hover,
-    [class*="NewEntryButton"]:hover {
-      box-shadow: 0 5px 20px rgba(0, 168, 232, 0.4) !important;
-      transform: translateY(-1px);
-    }
-    /* Delete button */
-    button[class*="delete"],
-    button[class*="Delete"] {
-      background: #ef4444 !important;
-      color: white !important;
-      border: none !important;
-      border-radius: 10px !important;
-    }
-
-    /* ── FORM FIELDS ── */
-    input[type="text"],
-    input[type="number"],
-    input[type="url"],
-    input[type="email"],
-    textarea,
-    select,
-    [class*="ControlInput"],
-    [class*="Widget"] input,
-    [class*="Widget"] textarea,
-    [class*="Widget"] select {
-      border: 2px solid var(--sh-border) !important;
-      border-radius: 10px !important;
-      padding: 12px 16px !important;
-      font-size: 15px !important;
-      transition: var(--sh-transition) !important;
-      background: var(--sh-surface) !important;
-      color: var(--sh-text) !important;
-    }
-    input:focus,
-    textarea:focus,
-    select:focus,
-    [class*="Widget"] input:focus,
-    [class*="Widget"] textarea:focus {
-      border-color: var(--sh-accent) !important;
-      box-shadow: 0 0 0 4px rgba(0, 168, 232, 0.12) !important;
-      outline: none !important;
-    }
-
-    /* Field labels */
-    label[class*="Label"],
-    [class*="ControlLabel"],
-    [class*="Widget"] label {
-      font-weight: 600 !important;
-      font-size: 13px !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.8px !important;
-      color: var(--sh-primary) !important;
-      margin-bottom: 6px !important;
-    }
-
-    /* ── MARKDOWN EDITOR ── */
-    [class*="MarkdownControl"],
-    [class*="EditorControlPane"] {
-      border-radius: var(--sh-radius) !important;
-      overflow: hidden;
-    }
-    [class*="Toolbar"][class*="markdown"],
-    [class*="EditorToolbar"] {
-      background: #f8fafc !important;
-      border-bottom: 1px solid var(--sh-border) !important;
-      border-radius: var(--sh-radius) var(--sh-radius) 0 0 !important;
-      padding: 8px !important;
-    }
-
-    /* ── PREVIEW PANE ── */
-    [class*="PreviewPane"],
-    [class*="preview-pane"],
-    iframe[class*="preview"] {
-      background: var(--sh-surface) !important;
-      border-left: 2px solid var(--sh-border) !important;
-    }
-
-    /* ── MEDIA LIBRARY ── */
-    [class*="MediaLibrary"],
-    [class*="Dialog"],
-    [class*="Modal"] {
-      border-radius: 16px !important;
-      box-shadow: var(--sh-shadow-lg) !important;
-      overflow: hidden;
-    }
-    [class*="MediaLibrary"] [class*="Header"],
-    [class*="Dialog"] [class*="Header"] {
-      background: linear-gradient(135deg, var(--sh-primary-dark), var(--sh-primary)) !important;
-      color: white !important;
-    }
-
-    /* ── DROPDOWN MENUS ── */
-    [class*="Dropdown"],
-    [class*="dropdown-menu"],
-    ul[class*="Dropdown"] {
-      border-radius: var(--sh-radius) !important;
-      box-shadow: var(--sh-shadow-lg) !important;
-      border: 1px solid var(--sh-border) !important;
-      overflow: hidden;
-    }
-    [class*="Dropdown"] li,
-    [class*="dropdown-menu"] li {
-      padding: 10px 16px !important;
+    /* Form fields */
+    input[type="text"], input[type="number"], input[type="url"], input[type="email"],
+    textarea, select, [class*="ControlInput"], [class*="Widget"] input,
+    [class*="Widget"] textarea, [class*="Widget"] select {
+      border: 2px solid var(--sh-border) !important; border-radius: 10px !important;
+      padding: 12px 16px !important; font-size: 15px !important;
+      background: var(--sh-surface) !important; color: var(--sh-text) !important;
       transition: var(--sh-transition) !important;
     }
-    [class*="Dropdown"] li:hover,
-    [class*="dropdown-menu"] li:hover {
-      background: rgba(26, 35, 126, 0.06) !important;
+    input:focus, textarea:focus, select:focus {
+      border-color: #00a8e8 !important; box-shadow: 0 0 0 4px rgba(0,168,232,0.12) !important; outline: none !important;
+    }
+    label[class*="Label"], [class*="ControlLabel"], [class*="Widget"] label {
+      font-weight: 600 !important; font-size: 13px !important; text-transform: uppercase !important;
+      letter-spacing: 0.8px !important; color: var(--sh-primary) !important; margin-bottom: 6px !important;
     }
 
-    /* ── STATUS / WORKFLOW BADGES ── */
-    [class*="StatusButton"],
-    [class*="Status"] {
-      border-radius: 20px !important;
-      font-size: 12px !important;
-      font-weight: 600 !important;
+    /* Media library */
+    [class*="MediaLibrary"], [class*="Dialog"], [class*="Modal"] {
+      border-radius: 16px !important; box-shadow: var(--sh-shadow-lg) !important;
+    }
+    [class*="MediaLibrary"] [class*="Header"], [class*="Dialog"] [class*="Header"] {
+      background: linear-gradient(135deg, #0d1542, #1a237e) !important; color: white !important;
     }
 
-    /* ── BREADCRUMB / BACK ── */
-    [class*="Breadcrumbs"],
-    [class*="BackArrow"] {
-      color: var(--sh-text-muted) !important;
+    /* Dropdown */
+    [class*="Dropdown"], ul[class*="Dropdown"] {
+      border-radius: var(--sh-radius) !important; box-shadow: var(--sh-shadow-lg) !important;
+      border: 1px solid var(--sh-border) !important; overflow: hidden;
     }
 
-    /* ── NOTIFICATION / TOAST ── */
-    [class*="Notification"],
-    [class*="Toast"] {
-      border-radius: var(--sh-radius) !important;
-      box-shadow: var(--sh-shadow-lg) !important;
-      font-weight: 500 !important;
-    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-    /* ── TOGGLE / BOOLEAN ── */
-    [class*="Toggle"] [class*="background"],
-    input[type="checkbox"] + span {
-      border-radius: 20px !important;
-    }
-
-    /* ── QUICK ADD DROPDOWN ── */
-    [class*="QuickAdd"],
-    [class*="quick-add"] {
-      border-radius: var(--sh-radius) !important;
-    }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      [class*="AppHeader"] header {
-        height: 56px !important;
-      }
-    }
-
-    /* ── SELECT WIDGET ── */
-    [class*="SelectWidget"] select,
-    [class*="select-widget"] select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
-      background-repeat: no-repeat !important;
-      background-position: right 12px center !important;
-      padding-right: 40px !important;
-    }
-
-    /* ── IMAGE WIDGET ── */
-    [class*="ImageWidget"],
-    [class*="FileWidget"] {
-      border: 2px dashed var(--sh-border) !important;
-      border-radius: var(--sh-radius) !important;
-      padding: 20px !important;
-      transition: var(--sh-transition) !important;
-      text-align: center;
-    }
-    [class*="ImageWidget"]:hover,
-    [class*="FileWidget"]:hover {
-      border-color: var(--sh-accent) !important;
-      background: rgba(0, 168, 232, 0.02) !important;
-    }
-
-    /* ── LIST WIDGET ── */
-    [class*="ListControl"] [class*="TopBar"],
-    [class*="ObjectWidgetTopBar"] {
-      background: #f1f5f9 !important;
-      border-radius: 8px !important;
-      padding: 8px 12px !important;
-    }
-
-    /* ── SMOOTH ANIMATIONS ── */
-    [class*="EntryListing"],
-    [class*="Sidebar"],
-    [class*="EditorControlPane"],
-    main {
-      animation: fadeIn 0.3s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* Animations */
+    [class*="EntryListing"], [class*="Sidebar"], main { animation: fadeIn 0.3s ease-out; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
   </style>
 </head>
 <body>
   <script>
-    // ── Register Custom Preview Styles ──
+    // Register preview styles
     CMS.registerPreviewStyle("/css/style.css");
 
-    // ── Turkish Date Preview ──
-    CMS.registerPreviewTemplate("blog", createClass({
+    // Blog preview template
+    var BlogPreview = createClass({
       render: function() {
         var entry = this.props.entry;
         var title = entry.getIn(["data", "title"]) || "";
@@ -423,27 +169,29 @@
         var excerpt = entry.getIn(["data", "excerpt"]) || "";
         var months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
                       "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
-
         var dateStr = "";
         if (date) {
-          var d = new Date(date);
-          if (!isNaN(d.getTime())) {
-            dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
-          }
+          try {
+            var d = new Date(date);
+            if (!isNaN(d.getTime())) {
+              dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+            }
+          } catch(e) {}
         }
-
         return h("div", { style: { fontFamily: "Poppins, sans-serif", maxWidth: "800px", margin: "0 auto", padding: "30px" } },
-          h("h1", { style: { color: "#1a237e", fontSize: "28px", marginBottom: "10px" } }, title),
-          excerpt && h("p", { style: { color: "#666", fontStyle: "italic", marginBottom: "20px" } }, excerpt),
-          h("div", { style: { display: "flex", gap: "20px", marginBottom: "25px", fontSize: "14px", color: "#999" } },
+          h("h1", { style: { color: "#1a237e", fontSize: "28px", marginBottom: "10px", lineHeight: "1.3" } }, title),
+          excerpt && h("p", { style: { color: "#666", fontStyle: "italic", marginBottom: "20px", fontSize: "16px" } }, excerpt),
+          h("div", { style: { display: "flex", gap: "16px", marginBottom: "25px", fontSize: "14px", color: "#999", flexWrap: "wrap" } },
             dateStr && h("span", {}, "📅 " + dateStr),
             category && h("span", { style: { background: "#1a237e", color: "white", padding: "3px 12px", borderRadius: "15px", fontSize: "12px" } }, category)
           ),
-          image && h("img", { src: image, alt: title, style: { width: "100%", borderRadius: "12px", marginBottom: "25px" } }),
+          image && h("img", { src: image, alt: title, style: { width: "100%", borderRadius: "12px", marginBottom: "25px", maxHeight: "400px", objectFit: "cover" } }),
           h("div", { style: { lineHeight: "1.8", fontSize: "16px", color: "#444" } }, body)
         );
       }
-    }));
+    });
+
+    CMS.registerPreviewTemplate("blog", BlogPreview);
   </script>
 </body>
 </html>

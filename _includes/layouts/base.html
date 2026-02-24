@@ -198,95 +198,209 @@
     </div>
 </footer>
 
+
 <!-- WHATSAPP — SAĞ TARAF -->
 <a href="https://wa.me/{{ site.whatsapp | default('905347054234') }}" class="wa-floating-btn" target="_blank" rel="noopener" aria-label="WhatsApp ile iletişime geçin" style="position:fixed;bottom:25px;right:25px;left:auto;flex-direction:row;display:flex;align-items:center;">
     <div class="wa-label" style="margin-right:12px;margin-left:0;">Size Nasıl Yardımcı Olabiliriz?</div>
     <div class="wa-icon"><i class="fab fa-whatsapp"></i></div>
 </a>
 
-<script>
-(function(){
-    var overlay = document.querySelector('.mobile-nav-overlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.className = 'mobile-nav-overlay';
-        document.body.insertBefore(overlay, document.body.firstChild);
+
+
+<style>
+/* ── MOBİL NAV OVERLAY ── */
+.mobile-nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9998;
+    backdrop-filter: blur(2px);
+}
+.mobile-nav-overlay.active { display: block; }
+
+/* ── HAMBURGER — DESKTOP'TA GİZLİ ── */
+.nav-open-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 10px;
+    color: #1a237e;
+    font-size: 26px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.nav-open-btn:hover { color: #00a8e8; }
+
+/* ── KAPATMA BUTONU — NORMALDE GİZLİ ── */
+.nav-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: #333;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+    transition: color 0.2s;
+}
+.nav-close-btn:hover { color: #1a237e; }
+
+/* ── MOBİL EKRAN ≤992px ── */
+@media (max-width: 992px) {
+
+    /* Hamburger göster */
+    .nav-open-btn { display: flex; align-items: center; }
+
+    /* Nav paneli: sağda gizli */
+    .main-nav {
+        display: flex !important;
+        flex-direction: column;
+        position: fixed;
+        top: 0; right: 0;
+        width: 300px;
+        max-width: 85vw;
+        height: 100vh;
+        background: #fff;
+        z-index: 9999;
+        box-shadow: -6px 0 32px rgba(0,0,0,0.18);
+        padding: 0;
+        overflow-y: auto;
+        transform: translateX(110%);
+        transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    var openBtn = document.querySelector('.nav-open-btn');
+
+    /* Açık durum */
+    .main-nav.mobile-open { transform: translateX(0); }
+
+    /* Kapatma butonu göster */
+    .main-nav.mobile-open .nav-close-btn { display: flex; }
+
+    /* Ana liste */
+    .main-nav > ul {
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 0 24px;
+        margin: 0;
+        list-style: none;
+    }
+
+    /* Ana linkler */
+    .main-nav > ul > li > a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 24px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+    }
+    .main-nav > ul > li > a:hover { background: #f0f4ff; color: #1a237e; }
+    .main-nav > ul > li > a.active { background: #eef2ff; color: #1a237e; }
+
+    /* Chevron */
+    .main-nav > ul > li > a i.fa-chevron-down,
+    .main-nav > ul > li > a i[class*="chevron"] {
+        transition: transform 0.3s ease;
+        font-size: 13px;
+        color: #aaa;
+    }
+    .main-nav > ul > li.dropdown.open > a i.fa-chevron-down,
+    .main-nav > ul > li.dropdown.open > a i[class*="chevron"] {
+        transform: rotate(180deg);
+        color: #1a237e;
+    }
+
+    /* Dropdown — accordion */
+    .main-nav .dropdown-menu {
+        position: static !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        min-width: unset !important;
+        background: #f8faff;
+        display: block !important;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease;
+        border-left: 3px solid #1a237e;
+        margin-left: 24px;
+    }
+    .main-nav .dropdown.open .dropdown-menu { max-height: 600px; }
+
+    /* Alt menü linkleri */
+    .main-nav .dropdown-menu li a {
+        display: block;
+        padding: 11px 20px 11px 16px;
+        font-size: 0.9rem;
+        color: #555;
+        font-weight: 500;
+        border-bottom: 1px solid #eef0f5;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+    }
+    .main-nav .dropdown-menu li a:hover { background: #e8eeff; color: #1a237e; }
+    .main-nav .dropdown-menu li a.active { color: #1a237e; font-weight: 700; }
+    .main-nav .dropdown-menu li:last-child a { border-bottom: none; }
+}
+</style>
+<script>
+(function () {
+    var overlay = document.createElement('div');
+    overlay.className = 'mobile-nav-overlay';
+    document.body.appendChild(overlay);
+
+    var openBtn  = document.querySelector('.nav-open-btn');
     var closeBtn = document.querySelector('.nav-close-btn');
-    var nav = document.querySelector('.main-nav');
+    var nav      = document.querySelector('.main-nav');
+
     function openNav() {
-        if (nav) nav.classList.add('mobile-open');
-        if (overlay) overlay.classList.add('active');
-        if (closeBtn) closeBtn.style.display = 'flex';
+        if (!nav) return;
+        nav.classList.add('mobile-open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
     function closeNav() {
-        if (nav) nav.classList.remove('mobile-open');
-        if (overlay) overlay.classList.remove('active');
-        if (closeBtn) closeBtn.style.display = '';
-        document.querySelectorAll('.dropdown.open').forEach(function(d){ d.classList.remove('open'); });
+        if (!nav) return;
+        nav.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        document.querySelectorAll('.main-nav .dropdown.open').forEach(function (d) {
+            d.classList.remove('open');
+        });
     }
-    if (openBtn) openBtn.addEventListener('click', openNav);
+
+    if (openBtn)  openBtn.addEventListener('click', openNav);
     if (closeBtn) closeBtn.addEventListener('click', closeNav);
-    if (overlay) overlay.addEventListener('click', closeNav);
-    document.querySelectorAll('.main-nav .dropdown > a').forEach(function(link){
-        link.addEventListener('click', function(e){
+    overlay.addEventListener('click', closeNav);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeNav();
+    });
+    window.addEventListener('resize', function () {
+        if (window.innerWidth > 992) closeNav();
+    });
+
+    document.querySelectorAll('.main-nav .dropdown > a').forEach(function (link) {
+        link.addEventListener('click', function (e) {
             if (window.innerWidth <= 992) {
                 e.preventDefault();
                 var parent = this.parentElement;
                 var wasOpen = parent.classList.contains('open');
-                document.querySelectorAll('.dropdown').forEach(function(d){ d.classList.remove('open'); });
+                document.querySelectorAll('.main-nav .dropdown').forEach(function (d) {
+                    d.classList.remove('open');
+                });
                 if (!wasOpen) parent.classList.add('open');
             }
         });
     });
 })();
 </script>
-
-<style>
-.mobile-nav-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9998; }
-.mobile-nav-overlay.active { display:block; }
-@media (max-width: 992px) {
-    .main-nav { display:none; }
-    .nav-open-btn { display:block !important; font-size:24px; color:#1a1a1a; padding:8px; background:none; border:none; cursor:pointer; }
-    .main-nav.mobile-open {
-        display:flex !important; flex-direction:column; position:fixed;
-        top:0; right:0; width:300px; height:100vh; max-width:85vw;
-        background:#fff; z-index:9999; box-shadow:-4px 0 24px rgba(0,0,0,0.15);
-        padding:0; overflow-y:auto; animation: slideIn 0.3s ease;
-    }
-    @keyframes slideIn { from { transform:translateX(100%); } to { transform:translateX(0); } }
-    .main-nav.mobile-open .nav-close-btn {
-        display:flex !important; align-items:center; justify-content:flex-end;
-        padding:18px 20px 12px; font-size:1.5rem; color:#1a1a1a; cursor:pointer;
-        background:none; border:none; border-bottom:1px solid #f0f0f0; width:100%;
-    }
-    .main-nav.mobile-open > ul { flex-direction:column; gap:0; padding:8px 0; }
-    .main-nav.mobile-open > ul > li > a {
-        display:flex; align-items:center; justify-content:space-between;
-        padding:14px 24px; border-bottom:1px solid #f5f5f5; font-size:1rem;
-        font-weight:600; color:#1a1a1a; transition:background 0.2s;
-    }
-    .main-nav.mobile-open > ul > li > a:hover { background:#f8f9fa; }
-    .main-nav.mobile-open .dropdown-menu {
-        position:static !important; box-shadow:none !important; border-radius:0 !important;
-        padding:0 !important; min-width:unset !important;
-        max-height:0; overflow:hidden; transition:max-height 0.35s ease;
-        background:#fafbfc; display:block !important;
-    }
-    .main-nav.mobile-open .dropdown.open .dropdown-menu { max-height:600px; }
-    .main-nav.mobile-open .dropdown-menu li a {
-        display:block; padding:11px 24px 11px 40px; font-size:0.92rem;
-        color:#555; font-weight:500; border-bottom:1px solid #f0f0f0; transition:all 0.2s;
-    }
-    .main-nav.mobile-open .dropdown-menu li a:hover { background:#eef2ff; color:#1a237e; }
-    .main-nav.mobile-open .dropdown-menu li:last-child a { border-bottom:none; }
-    .main-nav.mobile-open .dropdown > a .fa-chevron-down,
-    .main-nav.mobile-open .dropdown > a i[class*="chevron"] { transition:transform 0.3s ease; }
-    .main-nav.mobile-open .dropdown.open > a .fa-chevron-down,
-    .main-nav.mobile-open .dropdown.open > a i[class*="chevron"] { transform:rotate(180deg); }
-}
-</style>
-
 </body>
 </html>
