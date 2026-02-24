@@ -1,6 +1,6 @@
 {
   "hero": {
-    "title": "Bürokrasiyi Sizin İçin AŞIYORUZ",
+    "title": "Bürokrasiyi Sizin İçin Aşıyoruz",
     "subtitle": "STK, dernek ve vakıf yönetimi profesyonel bir yaklaşım gerektirir. Uzman ekibimizle her adımda yanınızdayız.",
     "cta_text": "Hizmetlerimizi Keşfedin",
     "cta_link": "#services"
@@ -19,9 +19,9 @@
   },
   "stats": {
     "experience_years": "10",
-    "successful_projects": "120",
-    "active_partners": "50",
-    "trained_participants": "10"
+    "successful_projects": "150",
+    "active_partners": "75",
+    "trained_participants": "1000"
   },
   "about_short": "Sivil Toplum Vizyonunuzun Mimarı",
   "about_text": "SH Danışmanlık, sivil toplum kuruluşlarının karmaşık yasal ve idari süreçlerde kaybolmasını önlemek amacıyla kurulmuştur. Tecrübeli kadromuzla yanınızdayız."

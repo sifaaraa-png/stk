@@ -1,9 +1,10 @@
 ---
+layout: layouts/blog-post.html
 title: "Ümraniye'de Dernek veya Vakıf Kurmak İsteyenler İçin Eksiksiz Rehber (2026)"
 description: "Ümraniye'de dernek veya vakıf kurmak mı istiyorsunuz? Yasal süreçler, gerekli belgeler, DERBİS kaydı ve uzman danışmanlık hizmetleri hakkında bilmeniz gereken her şey bu rehberde."
 date: "2026-02-20"
 author: "SH Danışmanlık Uzmanları"
-category: "Blog-Makaleler"
+category: "Uzman Rehberi"
 image: "/img/umraniye-stk-danismanlik-rehber.webp"
 image_alt: "Ümraniye'de dernek ve vakıf kurma danışmanlık hizmeti"
 read_time: 12

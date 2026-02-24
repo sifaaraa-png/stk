@@ -3,341 +3,447 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <title>SH Danışmanlık | Yönetim Paneli</title>
-  <link rel="icon" type="image/webp" href="/logo.webp" />
+  <link rel="icon" href="/logo.webp" type="image/webp" />
+
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
   <style>
-    /* ═══════════════════════════════════════════
-       SH DANIŞMANLIK — PREMIUM CMS THEME
-       ═══════════════════════════════════════════ */
-    
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    /* ╔══════════════════════════════════════════════╗
+       ║   SH DANIŞMANLIK — MODERN CMS THEME          ║
+       ╚══════════════════════════════════════════════╝ */
 
     :root {
-      --sh-primary: #0d2137;
-      --sh-accent: #0d6efd;
-      --sh-accent-hover: #0b5ed7;
-      --sh-sidebar-bg: #0a1929;
-      --sh-sidebar-hover: #132f4c;
-      --sh-header-bg: linear-gradient(135deg, #0d2137 0%, #1a3a5c 50%, #0d2137 100%);
-      --sh-surface: #f8fafc;
-      --sh-card: #ffffff;
-      --sh-border: #e2e8f0;
+      --sh-primary: #1a237e;
+      --sh-primary-light: #3949ab;
+      --sh-primary-dark: #0d1542;
+      --sh-accent: #00a8e8;
+      --sh-accent-light: #4dd0e1;
+      --sh-success: #25d366;
+      --sh-bg: #f0f4f8;
+      --sh-surface: #ffffff;
       --sh-text: #1e293b;
       --sh-text-muted: #64748b;
-      --sh-success: #10b981;
-      --sh-warning: #f59e0b;
+      --sh-border: #e2e8f0;
       --sh-radius: 12px;
-      --sh-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
-      --sh-shadow-lg: 0 4px 24px rgba(0,0,0,0.12);
+      --sh-shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --sh-shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+      --sh-shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --sh-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* ─── GLOBAL RESET ─── */
-    * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important; }
-    body { background: var(--sh-surface) !important; }
+    /* ── GLOBAL RESET ── */
+    * { box-sizing: border-box; }
 
-    /* ─── LOADING SCREEN ─── */
-    #sh-loader {
-      position: fixed; inset: 0; z-index: 99999;
-      background: var(--sh-primary);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      transition: opacity 0.5s ease;
-    }
-    #sh-loader.hide { opacity: 0; pointer-events: none; }
-    #sh-loader img { width: 80px; margin-bottom: 24px; filter: brightness(0) invert(1); }
-    #sh-loader h2 { color: #fff; font-size: 20px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.3px; }
-    #sh-loader p { color: #94a3b8; font-size: 14px; margin: 0 0 24px; }
-    .sh-spinner {
-      width: 36px; height: 36px;
-      border: 3px solid rgba(255,255,255,0.15);
-      border-top-color: var(--sh-accent);
-      border-radius: 50%;
-      animation: sh-spin 0.8s linear infinite;
-    }
-    @keyframes sh-spin { to { transform: rotate(360deg); } }
-
-    /* ─── TOP HEADER BAR ─── */
-    header[class*="AppHeader"],
-    div[class*="AppHeader"] {
-      background: var(--sh-header-bg) !important;
-      border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.2) !important;
-      min-height: 56px !important;
-    }
-    header[class*="AppHeader"] a,
-    header[class*="AppHeader"] span,
-    div[class*="AppHeader"] a,
-    div[class*="AppHeader"] span {
-      color: #e2e8f0 !important;
-      font-weight: 500 !important;
-      font-size: 14px !important;
-    }
-    header[class*="AppHeader"] a:hover,
-    div[class*="AppHeader"] a:hover {
-      color: #fff !important;
-      background: rgba(255,255,255,0.08) !important;
-      border-radius: 6px !important;
-    }
-    /* Logo in header */
-    header[class*="AppHeader"] img,
-    div[class*="AppHeader"] img {
-      height: 32px !important;
-      filter: brightness(0) invert(1) !important;
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--sh-bg) !important;
+      color: var(--sh-text);
+      margin: 0;
     }
 
-    /* ─── SIDEBAR NAVIGATION ─── */
-    div[class*="Sidebar"],
-    aside[class*="Sidebar"],
-    nav[class*="Sidebar"] {
-      background: var(--sh-sidebar-bg) !important;
-      border-right: 1px solid rgba(255,255,255,0.06) !important;
-      box-shadow: 2px 0 16px rgba(0,0,0,0.15) !important;
+    /* ── LOADING SCREEN ── */
+    #nc-root:empty::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--sh-primary-dark) 0%, var(--sh-primary) 50%, var(--sh-accent) 100%);
+      z-index: 99999;
     }
-    div[class*="Sidebar"] a,
-    div[class*="Sidebar"] span,
-    nav[class*="Sidebar"] a,
-    nav[class*="Sidebar"] span {
-      color: #94a3b8 !important;
-      font-weight: 500 !important;
-      font-size: 14px !important;
-      border-radius: 8px !important;
-      transition: all 0.2s ease !important;
+    #nc-root:empty::after {
+      content: 'SH Danışmanlık Yönetim Paneli Yükleniyor...';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      z-index: 100000;
+      animation: pulse 1.5s ease-in-out infinite;
     }
-    div[class*="Sidebar"] a:hover,
-    nav[class*="Sidebar"] a:hover {
-      color: #fff !important;
-      background: var(--sh-sidebar-hover) !important;
-    }
-    /* Active sidebar item */
-    div[class*="Sidebar"] a[class*="active"],
-    div[class*="Sidebar"] a[href][class*="selected"],
-    nav[class*="Sidebar"] a[class*="active"],
-    [class*="SidebarNavLink"][class*="active"] {
-      color: #fff !important;
-      background: var(--sh-accent) !important;
-      box-shadow: 0 2px 8px rgba(13,110,253,0.3) !important;
-    }
-    /* Sidebar section headers */
-    div[class*="Sidebar"] h2,
-    nav[class*="Sidebar"] h2 {
-      color: #475569 !important;
-      font-size: 11px !important;
-      text-transform: uppercase !important;
-      letter-spacing: 1.5px !important;
-      font-weight: 700 !important;
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
     }
 
-    /* ─── MAIN CONTENT AREA ─── */
-    main, [class*="AppMain"] {
+    /* ── TOP BAR / HEADER ── */
+    [class*="AppHeader"] header,
+    header[class*="Header"] {
+      background: linear-gradient(135deg, var(--sh-primary-dark) 0%, var(--sh-primary) 100%) !important;
+      box-shadow: var(--sh-shadow-lg) !important;
+      border-bottom: 3px solid var(--sh-accent) !important;
+      height: 64px !important;
+    }
+    [class*="AppHeader"] a,
+    header[class*="Header"] a {
+      color: white !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
+      transition: var(--sh-transition) !important;
+    }
+    [class*="AppHeader"] a:hover,
+    header[class*="Header"] a:hover {
+      color: var(--sh-accent-light) !important;
+    }
+
+    /* ── SIDEBAR ── */
+    [class*="Sidebar"],
+    aside[class*="sidebar"],
+    div[class*="CollectionPane"] {
       background: var(--sh-surface) !important;
+      border-right: 1px solid var(--sh-border) !important;
+      box-shadow: var(--sh-shadow-sm) !important;
+    }
+    [class*="SidebarNavLink"],
+    [class*="Sidebar"] a,
+    [class*="Sidebar"] li {
+      border-radius: 8px !important;
+      margin: 2px 8px !important;
+      padding: 10px 14px !important;
+      transition: var(--sh-transition) !important;
+      font-weight: 500 !important;
+      color: var(--sh-text) !important;
+    }
+    [class*="SidebarNavLink"]:hover,
+    [class*="Sidebar"] a:hover {
+      background: rgba(26, 35, 126, 0.06) !important;
+      color: var(--sh-primary) !important;
+    }
+    [class*="SidebarNavLink"][class*="active"],
+    [class*="Sidebar"] [class*="active"],
+    [class*="Sidebar"] li[class*="selected"] {
+      background: linear-gradient(135deg, var(--sh-primary), var(--sh-primary-light)) !important;
+      color: white !important;
+      box-shadow: 0 2px 8px rgba(26, 35, 126, 0.3) !important;
+    }
+    [class*="SidebarNavLink"][class*="active"] a,
+    [class*="Sidebar"] [class*="active"] a {
+      color: white !important;
     }
 
-    /* ─── COLLECTION LIST / CARDS ─── */
-    div[class*="ListCard"],
-    div[class*="EntryListing"],
-    [class*="ObjectWidgetTopBar"],
-    table[class*="EntryListing"] {
-      background: var(--sh-card) !important;
+    /* ── COLLECTION HEADING ── */
+    [class*="CollectionTop"] h1,
+    [class*="collection"] h1 {
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      color: var(--sh-primary-dark) !important;
+    }
+
+    /* ── ENTRY CARDS / LIST ITEMS ── */
+    [class*="ListCard"],
+    [class*="EntryListing"] > div > div,
+    [class*="collection"] [class*="Card"] {
+      background: var(--sh-surface) !important;
       border: 1px solid var(--sh-border) !important;
       border-radius: var(--sh-radius) !important;
-      box-shadow: var(--sh-shadow) !important;
-      overflow: hidden !important;
+      padding: 16px 20px !important;
+      margin-bottom: 8px !important;
+      transition: var(--sh-transition) !important;
+      box-shadow: var(--sh-shadow-sm) !important;
     }
-    /* Entry rows */
-    [class*="ListCardLink"],
-    [class*="EntryListingRow"] {
-      border-bottom: 1px solid #f1f5f9 !important;
-      transition: all 0.15s ease !important;
-      padding: 14px 20px !important;
-    }
-    [class*="ListCardLink"]:hover,
-    [class*="EntryListingRow"]:hover {
-      background: #f0f7ff !important;
-      transform: translateX(2px) !important;
+    [class*="ListCard"]:hover,
+    [class*="EntryListing"] > div > div:hover,
+    [class*="collection"] [class*="Card"]:hover {
+      border-color: var(--sh-accent) !important;
+      box-shadow: var(--sh-shadow-md) !important;
+      transform: translateY(-1px);
     }
 
-    /* ─── HEADINGS ─── */
-    h1[class*="Heading"],
-    h2[class*="ViewHeader"] {
-      color: var(--sh-text) !important;
-      font-weight: 700 !important;
-      font-size: 24px !important;
-      letter-spacing: -0.5px !important;
-    }
-
-    /* ─── BUTTONS ─── */
-    button[class*="ToolbarButton"],
-    [class*="PublishButton"],
-    a[class*="ToolbarButton"] {
-      background: var(--sh-accent) !important;
-      color: #fff !important;
-      border: none !important;
-      border-radius: 8px !important;
+    /* ── BUTTONS ── */
+    button[class*="Button"],
+    [class*="ToolbarButton"],
+    a[class*="Button"] {
+      border-radius: 10px !important;
       font-weight: 600 !important;
-      font-size: 14px !important;
-      padding: 8px 20px !important;
-      box-shadow: 0 2px 8px rgba(13,110,253,0.25) !important;
-      transition: all 0.2s ease !important;
-      cursor: pointer !important;
+      padding: 10px 22px !important;
+      transition: var(--sh-transition) !important;
+      text-transform: none !important;
+      letter-spacing: 0.3px !important;
     }
-    button[class*="ToolbarButton"]:hover,
-    [class*="PublishButton"]:hover {
-      background: var(--sh-accent-hover) !important;
-      box-shadow: 0 4px 16px rgba(13,110,253,0.35) !important;
-      transform: translateY(-1px) !important;
+    /* Primary buttons */
+    button[class*="Button"][class*="primary"],
+    button[class*="PublishButton"],
+    [class*="ToolbarButton"][class*="publish"],
+    div[class*="ToolbarSection"] > button:first-child {
+      background: linear-gradient(135deg, var(--sh-primary), var(--sh-primary-light)) !important;
+      color: white !important;
+      border: none !important;
+      box-shadow: 0 3px 12px rgba(26, 35, 126, 0.25) !important;
+    }
+    button[class*="Button"][class*="primary"]:hover,
+    button[class*="PublishButton"]:hover {
+      box-shadow: 0 5px 20px rgba(26, 35, 126, 0.35) !important;
+      transform: translateY(-1px);
+    }
+    /* New entry button */
+    a[href*="/new"],
+    [class*="NewEntryButton"],
+    [class*="collection"] a[class*="Button"] {
+      background: linear-gradient(135deg, var(--sh-accent), #0288d1) !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 10px !important;
+      box-shadow: 0 3px 12px rgba(0, 168, 232, 0.3) !important;
+      font-weight: 600 !important;
+    }
+    a[href*="/new"]:hover,
+    [class*="NewEntryButton"]:hover {
+      box-shadow: 0 5px 20px rgba(0, 168, 232, 0.4) !important;
+      transform: translateY(-1px);
     }
     /* Delete button */
-    button[class*="DeleteButton"] {
+    button[class*="delete"],
+    button[class*="Delete"] {
       background: #ef4444 !important;
-      box-shadow: 0 2px 8px rgba(239,68,68,0.25) !important;
-    }
-    button[class*="DeleteButton"]:hover {
-      background: #dc2626 !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 10px !important;
     }
 
-    /* ─── FORM INPUTS ─── */
-    input[class*="Input"],
-    textarea[class*="Textarea"],
-    select[class*="Select"],
+    /* ── FORM FIELDS ── */
+    input[type="text"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    select,
     [class*="ControlInput"],
-    [class*="TextField"] input,
-    [class*="TextControl"] input,
-    [class*="TextControl"] textarea {
+    [class*="Widget"] input,
+    [class*="Widget"] textarea,
+    [class*="Widget"] select {
       border: 2px solid var(--sh-border) !important;
-      border-radius: 8px !important;
-      padding: 10px 14px !important;
-      font-size: 14px !important;
-      transition: all 0.2s ease !important;
-      background: #fff !important;
+      border-radius: 10px !important;
+      padding: 12px 16px !important;
+      font-size: 15px !important;
+      transition: var(--sh-transition) !important;
+      background: var(--sh-surface) !important;
+      color: var(--sh-text) !important;
     }
-    input:focus, textarea:focus, select:focus,
-    [class*="TextField"] input:focus {
+    input:focus,
+    textarea:focus,
+    select:focus,
+    [class*="Widget"] input:focus,
+    [class*="Widget"] textarea:focus {
       border-color: var(--sh-accent) !important;
-      box-shadow: 0 0 0 3px rgba(13,110,253,0.12) !important;
+      box-shadow: 0 0 0 4px rgba(0, 168, 232, 0.12) !important;
       outline: none !important;
     }
 
-    /* ─── FIELD LABELS ─── */
-    label[class*="ControlLabel"],
-    [class*="FieldLabel"],
-    label[for] {
-      color: var(--sh-text) !important;
+    /* Field labels */
+    label[class*="Label"],
+    [class*="ControlLabel"],
+    [class*="Widget"] label {
       font-weight: 600 !important;
       font-size: 13px !important;
       text-transform: uppercase !important;
-      letter-spacing: 0.5px !important;
+      letter-spacing: 0.8px !important;
+      color: var(--sh-primary) !important;
       margin-bottom: 6px !important;
     }
-    /* Field hints */
-    [class*="ControlHint"],
-    span[class*="hint"] {
-      color: var(--sh-text-muted) !important;
-      font-size: 12px !important;
-      font-style: normal !important;
-    }
 
-    /* ─── MARKDOWN EDITOR ─── */
-    [class*="MarkdownWidget"],
-    [class*="EditorControl"] {
-      border: 2px solid var(--sh-border) !important;
+    /* ── MARKDOWN EDITOR ── */
+    [class*="MarkdownControl"],
+    [class*="EditorControlPane"] {
       border-radius: var(--sh-radius) !important;
-      overflow: hidden !important;
+      overflow: hidden;
     }
-    [class*="EditorToolbar"],
-    [class*="Toolbar"][class*="markdown"] {
+    [class*="Toolbar"][class*="markdown"],
+    [class*="EditorToolbar"] {
       background: #f8fafc !important;
       border-bottom: 1px solid var(--sh-border) !important;
+      border-radius: var(--sh-radius) var(--sh-radius) 0 0 !important;
       padding: 8px !important;
     }
-    [class*="EditorToolbar"] button {
-      border-radius: 6px !important;
-      padding: 6px 10px !important;
-    }
-    [class*="EditorToolbar"] button:hover {
-      background: #e2e8f0 !important;
+
+    /* ── PREVIEW PANE ── */
+    [class*="PreviewPane"],
+    [class*="preview-pane"],
+    iframe[class*="preview"] {
+      background: var(--sh-surface) !important;
+      border-left: 2px solid var(--sh-border) !important;
     }
 
-    /* ─── DROPDOWN / SELECT ─── */
-    [class*="SelectWidget"] select {
-      appearance: none !important;
-      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E") no-repeat right 12px center !important;
-      padding-right: 36px !important;
+    /* ── MEDIA LIBRARY ── */
+    [class*="MediaLibrary"],
+    [class*="Dialog"],
+    [class*="Modal"] {
+      border-radius: 16px !important;
+      box-shadow: var(--sh-shadow-lg) !important;
+      overflow: hidden;
+    }
+    [class*="MediaLibrary"] [class*="Header"],
+    [class*="Dialog"] [class*="Header"] {
+      background: linear-gradient(135deg, var(--sh-primary-dark), var(--sh-primary)) !important;
+      color: white !important;
     }
 
-    /* ─── IMAGE WIDGET ─── */
+    /* ── DROPDOWN MENUS ── */
+    [class*="Dropdown"],
+    [class*="dropdown-menu"],
+    ul[class*="Dropdown"] {
+      border-radius: var(--sh-radius) !important;
+      box-shadow: var(--sh-shadow-lg) !important;
+      border: 1px solid var(--sh-border) !important;
+      overflow: hidden;
+    }
+    [class*="Dropdown"] li,
+    [class*="dropdown-menu"] li {
+      padding: 10px 16px !important;
+      transition: var(--sh-transition) !important;
+    }
+    [class*="Dropdown"] li:hover,
+    [class*="dropdown-menu"] li:hover {
+      background: rgba(26, 35, 126, 0.06) !important;
+    }
+
+    /* ── STATUS / WORKFLOW BADGES ── */
+    [class*="StatusButton"],
+    [class*="Status"] {
+      border-radius: 20px !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+    }
+
+    /* ── BREADCRUMB / BACK ── */
+    [class*="Breadcrumbs"],
+    [class*="BackArrow"] {
+      color: var(--sh-text-muted) !important;
+    }
+
+    /* ── NOTIFICATION / TOAST ── */
+    [class*="Notification"],
+    [class*="Toast"] {
+      border-radius: var(--sh-radius) !important;
+      box-shadow: var(--sh-shadow-lg) !important;
+      font-weight: 500 !important;
+    }
+
+    /* ── TOGGLE / BOOLEAN ── */
+    [class*="Toggle"] [class*="background"],
+    input[type="checkbox"] + span {
+      border-radius: 20px !important;
+    }
+
+    /* ── QUICK ADD DROPDOWN ── */
+    [class*="QuickAdd"],
+    [class*="quick-add"] {
+      border-radius: var(--sh-radius) !important;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      [class*="AppHeader"] header {
+        height: 56px !important;
+      }
+    }
+
+    /* ── SELECT WIDGET ── */
+    [class*="SelectWidget"] select,
+    [class*="select-widget"] select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 12px center !important;
+      padding-right: 40px !important;
+    }
+
+    /* ── IMAGE WIDGET ── */
     [class*="ImageWidget"],
     [class*="FileWidget"] {
       border: 2px dashed var(--sh-border) !important;
       border-radius: var(--sh-radius) !important;
-      background: #fafbfc !important;
-      transition: all 0.2s ease !important;
+      padding: 20px !important;
+      transition: var(--sh-transition) !important;
+      text-align: center;
     }
     [class*="ImageWidget"]:hover,
     [class*="FileWidget"]:hover {
       border-color: var(--sh-accent) !important;
-      background: #f0f7ff !important;
+      background: rgba(0, 168, 232, 0.02) !important;
     }
 
-    /* ─── PREVIEW PANE ─── */
-    [class*="PreviewPane"] {
-      background: #fff !important;
-      border-left: 2px solid var(--sh-border) !important;
-    }
-
-    /* ─── NOTIFICATIONS / TOASTS ─── */
-    [class*="Notification"][class*="success"],
-    [class*="Toast"][class*="success"] {
-      background: var(--sh-success) !important;
+    /* ── LIST WIDGET ── */
+    [class*="ListControl"] [class*="TopBar"],
+    [class*="ObjectWidgetTopBar"] {
+      background: #f1f5f9 !important;
       border-radius: 8px !important;
+      padding: 8px 12px !important;
     }
 
-    /* ─── SCROLLBAR ─── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-    /* ─── SEARCH BOX ─── */
-    [class*="SearchInput"],
-    input[type="search"] {
-      background: rgba(255,255,255,0.06) !important;
-      border: 1px solid rgba(255,255,255,0.12) !important;
-      color: #fff !important;
-      border-radius: 8px !important;
+    /* ── SMOOTH ANIMATIONS ── */
+    [class*="EntryListing"],
+    [class*="Sidebar"],
+    [class*="EditorControlPane"],
+    main {
+      animation: fadeIn 0.3s ease-out;
     }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 768px) {
-      div[class*="Sidebar"] { width: 240px !important; }
-      h1[class*="Heading"] { font-size: 18px !important; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
-
 </head>
 <body>
-  <!-- Premium Loading Screen -->
-  <div id="sh-loader">
-    <img src="/logo.webp" alt="SH Danışmanlık" />
-    <h2>SH Danışmanlık</h2>
-    <p>Yönetim Paneli Yükleniyor...</p>
-    <div class="sh-spinner"></div>
-  </div>
-
-  <!-- Decap CMS — body'de olması zorunlu -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
   <script>
-    // Loading screen — CMS yüklendikten sonra kaldır
-    window.addEventListener('load', function() {
-      var loader = document.getElementById('sh-loader');
-      if (loader) {
-        setTimeout(function() {
-          loader.classList.add('hide');
-          setTimeout(function() { loader.remove(); }, 600);
-        }, 800);
+    // ── Register Custom Preview Styles ──
+    CMS.registerPreviewStyle("/css/style.css");
+
+    // ── Turkish Date Preview ──
+    CMS.registerPreviewTemplate("blog", createClass({
+      render: function() {
+        var entry = this.props.entry;
+        var title = entry.getIn(["data", "title"]) || "";
+        var body = this.props.widgetFor("body");
+        var image = entry.getIn(["data", "image"]);
+        var date = entry.getIn(["data", "date"]);
+        var category = entry.getIn(["data", "category"]) || "";
+        var excerpt = entry.getIn(["data", "excerpt"]) || "";
+        var months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
+                      "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+
+        var dateStr = "";
+        if (date) {
+          var d = new Date(date);
+          if (!isNaN(d.getTime())) {
+            dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
+          }
+        }
+
+        return h("div", { style: { fontFamily: "Poppins, sans-serif", maxWidth: "800px", margin: "0 auto", padding: "30px" } },
+          h("h1", { style: { color: "#1a237e", fontSize: "28px", marginBottom: "10px" } }, title),
+          excerpt && h("p", { style: { color: "#666", fontStyle: "italic", marginBottom: "20px" } }, excerpt),
+          h("div", { style: { display: "flex", gap: "20px", marginBottom: "25px", fontSize: "14px", color: "#999" } },
+            dateStr && h("span", {}, "📅 " + dateStr),
+            category && h("span", { style: { background: "#1a237e", color: "white", padding: "3px 12px", borderRadius: "15px", fontSize: "12px" } }, category)
+          ),
+          image && h("img", { src: image, alt: title, style: { width: "100%", borderRadius: "12px", marginBottom: "25px" } }),
+          h("div", { style: { lineHeight: "1.8", fontSize: "16px", color: "#444" } }, body)
+        );
       }
-    });
+    }));
   </script>
 </body>
 </html>
