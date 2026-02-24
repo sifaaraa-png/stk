@@ -1,11 +1,15 @@
 ---
 layout: layouts/blog-post.html
-title: "STK'lar İçin İktisadi İşletme Kurmanın 5 Kritik Avantajı"
-description: "Dernek ve vakıfların sürdürülebilir gelir modeli oluşturması için iktisadi işletme kurmanın tüm avantajları."
+title: STK'lar İçin İktisadi İşletme Kurmanın 5 Kritik AVANTAJI
+image: https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800
+category: Uzman Rehberi
 date: 2026-01-04
-category: "Uzman Rehberi"
-image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800"
-excerpt: "Dernek ve vakıfların sürdürülebilir gelir modeli oluşturması için iktisadi işletme kurmanın tüm avantajları. Vergi kolaylıkları, kurumsal güvenilirlik, finansal bağımsızlık ve istihdam yaratma konularında detaylı analiz."
+excerpt: Dernek ve vakıfların sürdürülebilir gelir modeli oluşturması için
+  iktisadi işletme kurmanın tüm avantajları. Vergi kolaylıkları, kurumsal
+  güvenilirlik, finansal bağımsızlık ve istihdam yaratma konularında detaylı
+  analiz.
+description: Dernek ve vakıfların sürdürülebilir gelir modeli oluşturması için
+  iktisadi işletme kurmanın tüm avantajları.
 ---
 
 Sivil toplum kuruluşları, faaliyetlerini sürdürülebilir kılmak için gelir kaynaklarını çeşitlendirmek zorundadır. İktisadi işletme kurmak, bu konuda en etkili yöntemlerden biridir.
