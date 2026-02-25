@@ -46,6 +46,20 @@ h1, h2, h3, h4 { color: var(--dark-color); line-height: 1.3; font-weight: 600; }
 }
 .logo-img:hover { transform: scale(1.05); }
 
+/* Mobile nav overlay */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(5,10,30,0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.mobile-nav-overlay.active { display: block; opacity: 1; }
+
 .main-nav ul { list-style: none; display: flex; align-items: center; gap: 8px; }
 .main-nav ul li { position: relative; }
 .main-nav ul li a { text-decoration: none; color: var(--dark-color); font-weight: 600; padding: 10px 5px; font-size: 0.95rem; }
@@ -75,7 +89,6 @@ h1, h2, h3, h4 { color: var(--dark-color); line-height: 1.3; font-weight: 600; }
     font-weight: 600; font-size: 0.95rem; border-radius: 8px; text-decoration: none; transition: all 0.3s ease; margin-left: 20px;
 }
 .btn-nav-final:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4); background-color: #0b5ed7; }
-.nav-close-btn { display: none; }
 
 .slider { position: relative; height: 90vh; overflow: hidden; background-color: #eee; }
 .slides { position: relative; width: 100%; height: 100%; }
@@ -246,7 +259,8 @@ main {
 @media (max-width: 992px) { 
     .about-grid, .content-grid, .contact-page-grid { grid-template-columns: 1fr; } 
     .about-image { height: 300px; }
-    .main-nav, .btn-nav-final { display: none; } 
+    /* NOT: .main-nav mobilde JS ile kontrol edilir, burada display:none kullanmıyoruz */
+    .btn-nav-final { display: none; }
 }
 @media (min-width: 768px) {
     .blog-post-card { flex-direction: row; }
@@ -653,112 +667,301 @@ main {
 }
 
 /* ============================================================
-   NAV — TEMİZ TEK TANIM (masaüstü + mobil)
+   NAV — QUANTUM MOBILE SYSTEM (SH Danışmanlık)
    ============================================================ */
 
-/* Masaüstü: butonlar gizli, nav görünür */
-.nav-open-btn,
-.nav-close-btn {
-    display: none;
-    background: transparent;
-    border: none;
-    font-size: 1.6rem;
-    color: var(--dark-color);
-    cursor: pointer;
-    padding: 8px;
-    line-height: 1;
-}
-.nav-close-btn i:hover { color: #e60000; }
-.nav-open-btn:hover    { color: var(--primary-color); }
+/* Desktop: hamburger gizli, close gizli */
+.nav-close-btn { display: none; }
 
-/* Mobil: hamburger görünür, nav gizli */
+/* ── Hamburger Butonu — desktop'ta gizli, mobilde flex ── */
+.nav-open-btn {
+  display: none; /* mobilde @media ile override edilir */
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(26,35,126,0.38);
+  transition: all 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.nav-open-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 60%);
+  border-radius: 12px;
+}
+.nav-open-btn svg { position: relative; z-index: 1; }
+.nav-open-btn:hover {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 6px 20px rgba(26,35,126,0.52);
+}
+.nav-open-btn:active { transform: scale(0.93); }
+
+/* ── MOBILE (≤992px) ── */
 @media (max-width: 992px) {
 
-    .nav-open-btn  { display: block; }
-    .nav-close-btn { display: block; position: absolute; top: 18px; right: 18px; z-index: 10001; font-size: 1.8rem; }
+  .nav-open-btn { display: flex; }
 
-    .main-nav {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        height: 100vh;
-        width: 280px;
-        background: #fff;
-        box-shadow: -5px 0 25px rgba(0,0,0,0.18);
-        padding: 65px 0 20px 0;
-        transition: right 0.3s ease;
-        z-index: 10000;
-        overflow-y: auto;
-        display: block;
-    }
+  /* Quantum panel */
+  .main-nav {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: auto !important;
+    width: 310px;
+    max-width: 88vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #080f24;
+    z-index: 9999;
+    overflow: hidden;
+    transform: translateX(110%);
+    transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+    padding: 0;
+    box-shadow: -16px 0 60px rgba(0,0,0,0.55);
+  }
 
-    .main-nav.mobile-open {
-        right: 0;
-    }
+  /* Sol kenar neon glow */
+  .main-nav::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px; height: 100%;
+    background: linear-gradient(180deg,
+      transparent 0%, #1a237e 20%, #42a5f5 50%, #1a237e 80%, transparent 100%
+    );
+    z-index: 10;
+    animation: qGlow 3.5s ease-in-out infinite;
+  }
+  @keyframes qGlow { 0%,100%{opacity:0.35} 50%{opacity:1} }
 
-    .main-nav > ul {
-        flex-direction: column;
-        gap: 0;
-        padding: 0;
-    }
+  /* Arka plan radyal ışık */
+  .main-nav::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 90% 15%, rgba(26,35,126,0.15) 0%, transparent 55%),
+      radial-gradient(ellipse at 10% 85%, rgba(66,165,245,0.1) 0%, transparent 55%);
+    z-index: 0;
+    pointer-events: none;
+  }
 
-    .main-nav > ul > li {
-        width: 100%;
-        border-bottom: 1px solid #f0f0f0;
-        margin: 0;
-    }
+  .main-nav.mobile-open {
+    transform: translateX(0);
+  }
 
-    .main-nav ul li a {
-        display: block;
-        padding: 14px 25px;
-        font-size: 0.95rem;
-        border-bottom: none;
-    }
+  /* Kapatma butonu */
+  .nav-close-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 22px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    width: 100%;
+    flex-shrink: 0;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    cursor: pointer;
+    position: static;
+    top: auto; right: auto;
+    font-size: inherit;
+    color: inherit;
+  }
+  .nav-close-btn .close-brand {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    font-family: 'Poppins', sans-serif;
+  }
+  .nav-close-btn .close-x {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.65);
+    font-size: 1rem;
+    transition: all 0.22s ease;
+    flex-shrink: 0;
+  }
+  .nav-close-btn .close-x:hover {
+    background: rgba(26,35,126,0.4);
+    border-color: rgba(66,165,245,0.5);
+    color: #fff;
+    transform: rotate(90deg);
+  }
 
-    /* Dropdown mobilde */
-    .main-nav .dropdown > a i {
-        float: right;
-        margin-top: 4px;
-    }
-    .main-nav .dropdown.open > a i { transform: rotate(180deg); }
-    .main-nav .dropdown-menu {
-        position: static !important;
-        display: none;
-        box-shadow: none;
-        background: #f8f9fa;
-        padding: 0;
-        border-radius: 0;
-        min-width: unset;
-    }
-    .main-nav .dropdown:hover .dropdown-menu { display: none; }
-    .main-nav .dropdown.open .dropdown-menu  { display: block; }
-    .main-nav .dropdown-menu li a { padding: 11px 25px 11px 45px; font-size: 0.88rem; }
+  /* Menü listesi */
+  .main-nav > ul {
+    flex-direction: column !important;
+    gap: 0 !important;
+    padding: 8px 0 32px !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    flex: 1 !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
 
-    /* Logo ve header küçük ekranda */
-    .logo-img    { height: 60px; }
-    .main-header { height: 70px; }
+  /* Ana öğe ayırıcı */
+  .main-nav > ul > li {
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin: 0;
+  }
+
+  /* Ana linkler */
+  .main-nav > ul > li > a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 15px 22px !important;
+    font-size: 0.96rem !important;
+    font-weight: 600 !important;
+    color: rgba(255,255,255,0.78) !important;
+    text-decoration: none !important;
+    border-left: 3px solid transparent !important;
+    border-bottom: none !important;
+    transition: all 0.22s ease !important;
+  }
+  /* Underline effect kapat */
+  .main-nav > ul > li > a::after { display: none !important; }
+
+  .main-nav > ul > li > a:hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.04) !important;
+    border-left-color: #42a5f5 !important;
+    padding-left: 26px !important;
+  }
+
+  .main-nav > ul > li.dropdown.open > a {
+    color: #90caf9 !important;
+    background: rgba(26,35,126,0.12) !important;
+    border-left-color: #1a237e !important;
+  }
+
+  /* Chevron ikonu */
+  .main-nav > ul > li > a i.fa-chevron-down {
+    font-size: 12px !important;
+    color: rgba(255,255,255,0.3) !important;
+    transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), color 0.22s ease !important;
+    flex-shrink: 0 !important;
+    float: none !important;
+    margin-top: 0 !important;
+  }
+  .main-nav .dropdown > a i { float: none; margin-top: 0; }
+  .main-nav .dropdown.open > a i { transform: rotate(0deg); }
+  .main-nav > ul > li.dropdown.open > a i.fa-chevron-down {
+    transform: rotate(180deg) !important;
+    color: #90caf9 !important;
+  }
+
+  /* Desktop hover'ı tamamen devre dışı bırak */
+  .main-nav .dropdown:hover > a i.fa-chevron-down { transform: none !important; }
+  .main-nav .dropdown.open:hover > a i.fa-chevron-down { transform: rotate(180deg) !important; }
+
+  /* ── Dropdown accordion ── */
+  .main-nav .dropdown-menu {
+    display: block !important;       /* display:none yerine max-height ile gizle */
+    position: static !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    min-width: unset !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1) !important;
+    background: rgba(0,0,0,0.22) !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  /* Desktop hover'ı sıfırla */
+  .main-nav .dropdown:hover .dropdown-menu      { display: block !important; max-height: 0 !important; }
+  /* Sadece .open class ile aç */
+  .main-nav .dropdown.open .dropdown-menu       { max-height: 500px !important; }
+  .main-nav .dropdown.open:hover .dropdown-menu { max-height: 500px !important; }
+
+  /* Alt menü linkleri */
+  .main-nav .dropdown-menu li a {
+    display: flex !important;
+    align-items: center !important;
+    padding: 11px 22px 11px 34px !important;
+    font-size: 0.87rem !important;
+    color: rgba(255,255,255,0.5) !important;
+    font-weight: 400 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+    transition: all 0.2s ease !important;
+    background: none !important;
+    border-left: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    text-decoration: none !important;
+  }
+  .main-nav .dropdown-menu li a::before {
+    content: '›';
+    margin-right: 10px;
+    font-size: 1.1rem;
+    color: rgba(66,165,245,0.45);
+    transition: all 0.2s ease;
+    line-height: 1;
+  }
+  .main-nav .dropdown-menu li a:hover {
+    color: #fff !important;
+    background: rgba(26,35,126,0.15) !important;
+    padding-left: 38px !important;
+  }
+  .main-nav .dropdown-menu li a:hover::before { color: #90caf9; }
+  .main-nav .dropdown-menu li:last-child a { border-bottom: none !important; }
+
+  /* Logo mobilde büyüt */
+  .logo-img    { height: 75px !important; }
+  .main-header { height: 88px; }
 }
 
-/* Masaüstü: nav kesinlikle yatay */
+/* ── Desktop (≥993px): nav yatay, normal ── */
 @media (min-width: 993px) {
-    .main-nav {
-        display: flex !important;
-        flex-direction: row !important;
-        position: static !important;
-        right: auto !important;
-        width: auto !important;
-        height: auto !important;
-        box-shadow: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        overflow: visible !important;
-        transition: none !important;
-    }
-    .main-nav > ul {
-        flex-direction: row !important;
-        gap: 20px !important;
-        padding: 0 !important;
-    }
+  .main-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    position: static !important;
+    right: 0 !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .main-nav > ul {
+    flex-direction: row !important;
+    gap: 20px !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  /* Desktop dropdown hover — normal */
+  .main-nav .dropdown:hover .dropdown-menu { display: block !important; max-height: none !important; }
+  .main-nav .dropdown-menu {
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
 /* Genel taşma ve hizalama temizliği */
 html, body {

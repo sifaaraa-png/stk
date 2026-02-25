@@ -74,7 +74,10 @@ permalink: "/blog-dernek-yonetici-sorumluluklari.html"
       <img src="/logo.webp" alt="SH Danışmanlık" class="logo-img" width="180" height="55" />
     </a>
     <nav class="main-nav">
-      <button class="nav-close-btn" aria-label="Menüyü kapat"><i class="fas fa-times"></i></button>
+      <button class="nav-close-btn" aria-label="Menüyü kapat">
+        <span class="close-brand">MENÜ</span>
+        <span class="close-x"><i class="fas fa-times"></i></span>
+      </button>
       <ul>
         <li><a href="/index.html">Ana Sayfa</a></li>
         <li class="dropdown">
@@ -109,7 +112,11 @@ permalink: "/blog-dernek-yonetici-sorumluluklari.html"
         <li><a href="/iletisim.html">İletişim</a></li>
       </ul>
     </nav>
-    <button class="nav-open-btn" aria-label="Menüyü aç"><i class="fas fa-bars"></i></button>
+    <button class="nav-open-btn" aria-label="Menüyü aç" aria-expanded="false">
+      <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
   </div>
 </header>
 <main>
@@ -231,3 +238,32 @@ permalink: "/blog-dernek-yonetici-sorumluluklari.html"
     <div class="wa-icon"><i class="fab fa-whatsapp"></i></div>
 </a>
 </
+<div id="navOverlay" style="display:none;position:fixed;inset:0;background:rgba(5,10,30,0.72);z-index:9997;opacity:0;transition:opacity 0.35s ease;"></div>
+<script>
+(function(){
+  var overlay=document.getElementById("navOverlay");
+  var nav=document.querySelector(".main-nav");
+  var openBtn=document.querySelector(".nav-open-btn");
+  var closeBtn=document.querySelector(".nav-close-btn");
+  if(!nav||!openBtn)return;
+  function openNav(){nav.classList.add("mobile-open");overlay.style.display="block";setTimeout(function(){overlay.style.opacity="1";},10);document.body.style.overflow="hidden";}
+  function closeNav(){nav.classList.remove("mobile-open");overlay.style.opacity="0";setTimeout(function(){overlay.style.display="none";},350);document.body.style.overflow="";document.querySelectorAll(".main-nav .dropdown").forEach(function(d){d.classList.remove("open");});}
+  openBtn.addEventListener("click",openNav);
+  if(closeBtn)closeBtn.addEventListener("click",closeNav);
+  overlay.addEventListener("click",closeNav);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeNav();});
+  window.addEventListener("resize",function(){if(window.innerWidth>992)closeNav();});
+  document.querySelectorAll(".main-nav .dropdown > a").forEach(function(link){
+    link.addEventListener("click",function(e){
+      if(window.innerWidth<=992){
+        e.preventDefault();e.stopPropagation();
+        var p=this.parentElement,wasOpen=p.classList.contains("open");
+        document.querySelectorAll(".main-nav .dropdown").forEach(function(d){d.classList.remove("open");});
+        if(!wasOpen)p.classList.add("open");
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

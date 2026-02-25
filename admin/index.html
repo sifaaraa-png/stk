@@ -1,197 +1,472 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex, nofollow">
-  <title>SH Danışmanlık | Yönetim Paneli</title>
-  <link rel="icon" href="/logo.webp" type="image/webp">
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SH Danışmanlık — Yönetim Paneli</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --sh-primary: #1a237e;
-      --sh-primary-light: #3949ab;
-      --sh-primary-dark: #0d1542;
-      --sh-accent: #00a8e8;
-      --sh-accent-light: #4dd0e1;
-      --sh-bg: #f0f4f8;
-      --sh-surface: #ffffff;
-      --sh-text: #1e293b;
-      --sh-text-muted: #64748b;
-      --sh-border: #e2e8f0;
-      --sh-radius: 12px;
-      --sh-shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --sh-shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-      --sh-shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-      --sh-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --navy:   #0d1b2a;
+      --deep:   #112236;
+      --gold:   #c9a84c;
+      --gold-lt:#e8c96e;
+      --ivory:  #f5f0e8;
+      --muted:  #6b7a8d;
+      --glass:  rgba(255,255,255,0.04);
+      --border: rgba(201,168,76,0.2);
     }
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--sh-bg) !important;
-      color: var(--sh-text);
-      margin: 0;
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      overflow: hidden;
     }
-    /* Loading screen */
-    #nc-root:empty::before {
+
+    /* ── ANIMATED BACKGROUND ── */
+    .bg {
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 90%, rgba(201,168,76,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 70% at 90% 10%, rgba(17,34,54,0.9) 0%, transparent 70%),
+        linear-gradient(135deg, #0d1b2a 0%, #112236 50%, #0a1520 100%);
+    }
+
+    .bg-lines {
+      position: fixed; inset: 0; overflow: hidden; pointer-events: none;
+    }
+    .bg-lines::before, .bg-lines::after {
       content: '';
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #0d1542 0%, #1a237e 50%, #00a8e8 100%);
-      z-index: 99999;
+      position: absolute;
+      border: 1px solid rgba(201,168,76,0.06);
+      border-radius: 50%;
+      animation: pulse-ring 8s ease-in-out infinite;
     }
-    #nc-root:empty::after {
-      content: 'SH Danışmanlık — Yönetim Paneli Yükleniyor...';
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      z-index: 100000;
-      animation: pulse 1.5s ease-in-out infinite;
+    .bg-lines::before {
+      width: 700px; height: 700px;
+      top: -200px; right: -200px;
     }
-    @keyframes pulse { 0%,100%{opacity:0.6}50%{opacity:1} }
-
-    /* Header */
-    [class*="AppHeader"] header, header[class*="Header"] {
-      background: linear-gradient(135deg, #0d1542 0%, #1a237e 100%) !important;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
-      border-bottom: 3px solid #00a8e8 !important;
-      height: 64px !important;
+    .bg-lines::after {
+      width: 500px; height: 500px;
+      bottom: -150px; left: -150px;
+      animation-delay: 4s;
     }
-    [class*="AppHeader"] a, header[class*="Header"] a { color: white !important; font-weight: 600 !important; }
-    [class*="AppHeader"] a:hover, header[class*="Header"] a:hover { color: #4dd0e1 !important; }
-
-    /* Sidebar */
-    [class*="Sidebar"], aside[class*="sidebar"], div[class*="CollectionPane"] {
-      background: var(--sh-surface) !important;
-      border-right: 1px solid var(--sh-border) !important;
-    }
-    [class*="SidebarNavLink"], [class*="Sidebar"] a, [class*="Sidebar"] li {
-      border-radius: 8px !important; margin: 2px 8px !important; padding: 10px 14px !important;
-      transition: var(--sh-transition) !important; font-weight: 500 !important; color: var(--sh-text) !important;
-    }
-    [class*="SidebarNavLink"]:hover, [class*="Sidebar"] a:hover {
-      background: rgba(26,35,126,0.06) !important; color: var(--sh-primary) !important;
-    }
-    [class*="SidebarNavLink"][class*="active"], [class*="Sidebar"] [class*="active"] {
-      background: linear-gradient(135deg, #1a237e, #3949ab) !important; color: white !important;
-      box-shadow: 0 2px 8px rgba(26,35,126,0.3) !important;
-    }
-    [class*="SidebarNavLink"][class*="active"] a, [class*="Sidebar"] [class*="active"] a { color: white !important; }
-
-    /* Entry cards */
-    [class*="ListCard"], [class*="EntryListing"]>div>div, [class*="collection"] [class*="Card"] {
-      background: var(--sh-surface) !important; border: 1px solid var(--sh-border) !important;
-      border-radius: var(--sh-radius) !important; padding: 16px 20px !important; margin-bottom: 8px !important;
-      transition: var(--sh-transition) !important; box-shadow: var(--sh-shadow-sm) !important;
-    }
-    [class*="ListCard"]:hover, [class*="EntryListing"]>div>div:hover {
-      border-color: #00a8e8 !important; box-shadow: var(--sh-shadow-md) !important; transform: translateY(-1px);
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50%       { opacity: 0.8; transform: scale(1.05); }
     }
 
-    /* Buttons */
-    button[class*="Button"], [class*="ToolbarButton"], a[class*="Button"] {
-      border-radius: 10px !important; font-weight: 600 !important; padding: 10px 22px !important;
-      transition: var(--sh-transition) !important; text-transform: none !important;
-    }
-    button[class*="Button"][class*="primary"], button[class*="PublishButton"] {
-      background: linear-gradient(135deg, #1a237e, #3949ab) !important; color: white !important;
-      border: none !important; box-shadow: 0 3px 12px rgba(26,35,126,0.25) !important;
-    }
-    a[href*="/new"], [class*="NewEntryButton"] {
-      background: linear-gradient(135deg, #00a8e8, #0288d1) !important; color: white !important;
-      border: none !important; border-radius: 10px !important; font-weight: 600 !important;
-    }
-    button[class*="delete"], button[class*="Delete"] {
-      background: #ef4444 !important; color: white !important; border: none !important; border-radius: 10px !important;
+    /* grid overlay */
+    .grid-overlay {
+      position: fixed; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
 
-    /* Form fields */
-    input[type="text"], input[type="number"], input[type="url"], input[type="email"],
-    textarea, select, [class*="ControlInput"], [class*="Widget"] input,
-    [class*="Widget"] textarea, [class*="Widget"] select {
-      border: 2px solid var(--sh-border) !important; border-radius: 10px !important;
-      padding: 12px 16px !important; font-size: 15px !important;
-      background: var(--sh-surface) !important; color: var(--sh-text) !important;
-      transition: var(--sh-transition) !important;
-    }
-    input:focus, textarea:focus, select:focus {
-      border-color: #00a8e8 !important; box-shadow: 0 0 0 4px rgba(0,168,232,0.12) !important; outline: none !important;
-    }
-    label[class*="Label"], [class*="ControlLabel"], [class*="Widget"] label {
-      font-weight: 600 !important; font-size: 13px !important; text-transform: uppercase !important;
-      letter-spacing: 0.8px !important; color: var(--sh-primary) !important; margin-bottom: 6px !important;
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative; z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 480px 1fr;
+      grid-template-rows: 1fr auto 1fr;
+      min-height: 100vh;
+      align-items: center;
+      padding: 40px 20px;
     }
 
-    /* Media library */
-    [class*="MediaLibrary"], [class*="Dialog"], [class*="Modal"] {
-      border-radius: 16px !important; box-shadow: var(--sh-shadow-lg) !important;
+    .card {
+      grid-column: 2;
+      grid-row: 2;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 56px 48px 48px;
+      backdrop-filter: blur(20px);
+      box-shadow:
+        0 0 0 1px rgba(201,168,76,0.08),
+        0 40px 80px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+      animation: card-in 0.8s cubic-bezier(0.22,1,0.36,1) both;
     }
-    [class*="MediaLibrary"] [class*="Header"], [class*="Dialog"] [class*="Header"] {
-      background: linear-gradient(135deg, #0d1542, #1a237e) !important; color: white !important;
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(32px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Dropdown */
-    [class*="Dropdown"], ul[class*="Dropdown"] {
-      border-radius: var(--sh-radius) !important; box-shadow: var(--sh-shadow-lg) !important;
-      border: 1px solid var(--sh-border) !important; overflow: hidden;
+    /* ── LOGO / HEADER ── */
+    .logo-wrap {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 36px;
+    }
+    .logo-icon {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      color: var(--navy);
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+    }
+    .logo-text { line-height: 1.2; }
+    .logo-text strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-weight: 700;
+      color: var(--ivory);
+      letter-spacing: 0.01em;
+    }
+    .logo-text span {
+      font-size: 11px; font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin-bottom: 36px;
+    }
 
-    /* Animations */
-    [class*="EntryListing"], [class*="Sidebar"], main { animation: fadeIn 0.3s ease-out; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; font-weight: 600;
+      color: var(--ivory);
+      margin-bottom: 6px;
+    }
+    .card-sub {
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    /* ── FORM ── */
+    .field { margin-bottom: 20px; }
+    label {
+      display: block;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .input-wrap { position: relative; display: flex; align-items: center; }
+    .input-wrap > svg {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px;
+      color: var(--muted);
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 44px 14px 44px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; color: var(--ivory);
+      outline: none;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+      -webkit-appearance: none;
+    }
+    input::placeholder { color: rgba(255,255,255,0.2); }
+    input:focus {
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.05);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    input:focus + svg, .input-wrap:focus-within > svg { color: var(--gold); }
+    /* icon before input — reorder via wrapper */
+    .input-wrap input { order: 1; }
+    .input-wrap svg { order: 0; }
+
+    /* eye toggle */
+    .toggle-eye {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); padding: 4px;
+      transition: color 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+    }
+    .toggle-eye:hover { color: var(--gold); }
+    .toggle-eye svg { width: 16px; height: 16px; display: block; pointer-events: none; }
+
+    /* remember row */
+    .row-opts {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .checkbox-wrap {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; user-select: none;
+    }
+    .checkbox-wrap input[type="checkbox"] {
+      width: 16px; height: 16px; padding: 0;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+    .checkbox-wrap span { font-size: 13px; color: var(--muted); }
+    .forgot {
+      font-size: 13px; color: var(--gold);
+      text-decoration: none; opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .forgot:hover { opacity: 1; }
+
+    /* ── BUTTON ── */
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+      border: none; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--navy);
+      cursor: pointer;
+      position: relative; overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    }
+    .btn-login::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .btn-login:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(201,168,76,0.4); }
+    .btn-login:hover::before { opacity: 1; }
+    .btn-login:active { transform: translateY(0); }
+
+    /* loading state */
+    .btn-login.loading .btn-text { opacity: 0; }
+    .btn-login .spinner {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 20px; height: 20px;
+      border: 2px solid rgba(13,27,42,0.3);
+      border-top-color: var(--navy);
+      border-radius: 50%;
+      opacity: 0;
+      animation: spin 0.7s linear infinite;
+    }
+    .btn-login.loading .spinner { opacity: 1; }
+    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+    /* ── FOOTER ── */
+    .card-footer {
+      margin-top: 28px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .badge {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 5px 10px;
+      font-size: 11px; color: var(--muted);
+    }
+    .badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 6px #4ade80;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+    .netlify-badge {
+      margin-left: auto;
+      font-size: 11px; color: var(--muted);
+      text-decoration: none;
+      opacity: 0.6; transition: opacity 0.2s;
+    }
+    .netlify-badge:hover { opacity: 1; }
+
+    /* ── SIDE DECORATION ── */
+    .side-text {
+      writing-mode: vertical-rl; text-orientation: mixed;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(201,168,76,0.2);
+      grid-column: 1; grid-row: 2;
+      justify-self: end; padding-right: 40px;
+      user-select: none;
+    }
+    .side-text-r {
+      grid-column: 3; grid-row: 2;
+      justify-self: start; padding-left: 40px;
+      color: rgba(255,255,255,0.06);
+    }
+
+    /* ── ERROR STATE ── */
+    .error-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 8px;
+      font-size: 13px; color: #fca5a5;
+    }
+    .error-msg.show { display: block; animation: shake 0.4s; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .wrapper { grid-template-columns: 1fr; padding: 20px; }
+      .card { padding: 40px 28px 36px; grid-column: 1; }
+      .side-text, .side-text-r { display: none; }
+    }
   </style>
 </head>
 <body>
-  <script>
-    // Register preview styles
-    CMS.registerPreviewStyle("/css/style.css");
 
-    // Blog preview template
-    var BlogPreview = createClass({
-      render: function() {
-        var entry = this.props.entry;
-        var title = entry.getIn(["data", "title"]) || "";
-        var body = this.props.widgetFor("body");
-        var image = entry.getIn(["data", "image"]);
-        var date = entry.getIn(["data", "date"]);
-        var category = entry.getIn(["data", "category"]) || "";
-        var excerpt = entry.getIn(["data", "excerpt"]) || "";
-        var months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
-                      "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
-        var dateStr = "";
-        if (date) {
-          try {
-            var d = new Date(date);
-            if (!isNaN(d.getTime())) {
-              dateStr = d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
-            }
-          } catch(e) {}
-        }
-        return h("div", { style: { fontFamily: "Poppins, sans-serif", maxWidth: "800px", margin: "0 auto", padding: "30px" } },
-          h("h1", { style: { color: "#1a237e", fontSize: "28px", marginBottom: "10px", lineHeight: "1.3" } }, title),
-          excerpt && h("p", { style: { color: "#666", fontStyle: "italic", marginBottom: "20px", fontSize: "16px" } }, excerpt),
-          h("div", { style: { display: "flex", gap: "16px", marginBottom: "25px", fontSize: "14px", color: "#999", flexWrap: "wrap" } },
-            dateStr && h("span", {}, "📅 " + dateStr),
-            category && h("span", { style: { background: "#1a237e", color: "white", padding: "3px 12px", borderRadius: "15px", fontSize: "12px" } }, category)
-          ),
-          image && h("img", { src: image, alt: title, style: { width: "100%", borderRadius: "12px", marginBottom: "25px", maxHeight: "400px", objectFit: "cover" } }),
-          h("div", { style: { lineHeight: "1.8", fontSize: "16px", color: "#444" } }, body)
-        );
+<div class="bg"></div>
+<div class="bg-lines"></div>
+<div class="grid-overlay"></div>
+
+<div class="wrapper">
+  <span class="side-text">SH Danışmanlık — Yönetim Sistemi</span>
+
+  <div class="card">
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <div class="logo-icon">SH</div>
+      <div class="logo-text">
+        <strong>SH Danışmanlık</strong>
+        <span>İçerik Yönetim Sistemi</span>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <p class="card-title">Hoş Geldiniz</p>
+    <p class="card-sub">Devam etmek için giriş yapın.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">E-Posta Adresi</label>
+        <div class="input-wrap">
+          <input type="email" id="email" name="email" placeholder="admin@shdanismanlik.com" autocomplete="username" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Şifre</label>
+        <div class="input-wrap">
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <button type="button" class="toggle-eye" id="eyeBtn" aria-label="Şifreyi göster">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="row-opts">
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="remember" name="remember" />
+          <span>Beni hatırla</span>
+        </label>
+        <a href="#" class="forgot">Şifremi unuttum?</a>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">
+        <span class="btn-text">Giriş Yap →</span>
+        <div class="spinner"></div>
+      </button>
+
+      <div class="error-msg" id="errorMsg">
+        E-posta veya şifre hatalı. Lütfen tekrar deneyin.
+      </div>
+    </form>
+
+    <div class="card-footer">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Sistem Aktif
+      </div>
+  </div>
+
+  <span class="side-text side-text-r">STK · Dernek · Vakıf Danışmanlığı</span>
+</div>
+
+<script>
+  /* Eye toggle */
+  const eyeBtn = document.getElementById('eyeBtn');
+  const pwInput = document.getElementById('password');
+  const eyeIcon = document.getElementById('eyeIcon');
+  const eyeOpen  = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  const eyeClosed = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+  eyeBtn.addEventListener('click', () => {
+    const show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+    eyeIcon.innerHTML = show ? eyeClosed : eyeOpen;
+  });
+
+  /* Form submit → Netlify Identity */
+  const form = document.getElementById('loginForm');
+  const btn  = document.getElementById('loginBtn');
+  const err  = document.getElementById('errorMsg');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.remove('show');
+    btn.classList.add('loading');
+
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      /* Netlify Identity widget is loaded via the /admin/ route automatically.
+         If you have netlify-identity-widget.js loaded, use window.netlifyIdentity.
+         Otherwise forward to the CMS directly: */
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.login({ email, password });
+      } else {
+        /* Fallback: redirect to CMS admin with Netlify Identity */
+        await new Promise(r => setTimeout(r, 1200));
+        window.location.href = '/admin/#';
       }
-    });
+    } catch {
+      btn.classList.remove('loading');
+      err.classList.add('show');
+    }
+  });
 
-    CMS.registerPreviewTemplate("blog", BlogPreview);
-  </script>
+  /* Auto-focus */
+  document.getElementById('email').focus();
+</script>
+
+<!-- Netlify Identity Widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on('init', user => {
+      if (user) window.location.href = '/admin/#';
+    });
+    window.netlifyIdentity.on('login', () => {
+      window.location.href = '/admin/#';
+    });
+  }
+</script>
 </body>
 </html>
