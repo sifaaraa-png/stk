@@ -386,7 +386,7 @@
           <input type="checkbox" id="remember" name="remember" />
           <span>Beni hatırla</span>
         </label>
-        <a href="#" class="forgot">Şifremi unuttum?</a>
+        <a href="#" class="forgot" id="forgotBtn">Şifremi unuttum?</a>
       </div>
 
       <button type="submit" class="btn-login" id="loginBtn">
@@ -424,11 +424,37 @@
     eyeIcon.innerHTML = show ? eyeClosed : eyeOpen;
   });
 
-  /* Form submit → Netlify Identity GoTrue direct API */
-  const form = document.getElementById('loginForm');
-  const btn  = document.getElementById('loginBtn');
-  const err  = document.getElementById('errorMsg');
+  const form    = document.getElementById('loginForm');
+  const btn     = document.getElementById('loginBtn');
+  const err     = document.getElementById('errorMsg');
+  const forgot  = document.getElementById('forgotBtn');
 
+  // Şifremi unuttum — GoTrue recovery email API
+  forgot.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    if (!email) {
+      alert('Lütfen önce e-posta adresinizi girin.');
+      document.getElementById('email').focus();
+      return;
+    }
+    try {
+      const res = await fetch('/.netlify/identity/recover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (res.ok || res.status === 204) {
+        alert('Şifre sıfırlama maili gönderildi! Spam klasörünü de kontrol edin.');
+      } else {
+        alert('Mail gönderilemedi. E-posta adresinizi kontrol edin.');
+      }
+    } catch {
+      alert('Bağlantı hatası. Lütfen tekrar deneyin.');
+    }
+  });
+
+  // Giriş — Netlify Identity GoTrue token endpoint
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     err.classList.remove('show');
@@ -438,49 +464,53 @@
     const password = document.getElementById('password').value;
 
     try {
-      // GoTrue API ile doğrudan giriş
-      const siteUrl = window.location.origin;
-      const res = await fetch(`${siteUrl}/.netlify/identity/token`, {
+      const res = await fetch('/.netlify/identity/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `grant_type=password&username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
       });
 
-      if (!res.ok) throw new Error('Auth failed');
-
       const data = await res.json();
-      if (data.access_token) {
-        // Token'ı sakla, CMS'e yönlendir
-        localStorage.setItem('gotrue.access-token', data.access_token);
-        localStorage.setItem('gotrue.refresh-token', data.refresh_token || '');
-        // Netlify Identity widget token formatı
-        const userKey = 'gotrue.user';
-        localStorage.setItem(userKey, JSON.stringify({
-          access_token: data.access_token,
-          refresh_token: data.refresh_token,
-          expires_at: Math.round(Date.now() / 1000) + (data.expires_in || 3600)
-        }));
-        window.location.href = '/admin/';
-      } else {
-        throw new Error('No token');
+
+      if (!res.ok || !data.access_token) {
+        throw new Error(data.error_description || 'Auth failed');
       }
-    } catch {
+
+      // Netlify Identity'nin beklediği localStorage formatı
+      const expires = new Date(Date.now() + (data.expires_in || 3600) * 1000).toISOString();
+      const userObj = {
+        access_token:  data.access_token,
+        token_type:    'bearer',
+        expires_in:    data.expires_in || 3600,
+        refresh_token: data.refresh_token || '',
+        expires_at:    expires
+      };
+      localStorage.setItem('netlify-cms-user', JSON.stringify(userObj));
+      // GoTrue widget formatı da ekle
+      localStorage.setItem('gotrue.user', JSON.stringify(userObj));
+
+      // CMS'e yönlendir
+      window.location.href = '/admin/';
+
+    } catch (ex) {
+      console.error(ex);
       btn.classList.remove('loading');
       err.classList.add('show');
     }
   });
 
-  /* Auto-focus */
   document.getElementById('email').focus();
 </script>
 
-<!-- Netlify Identity Widget -->
+<!-- Netlify Identity Widget — sadece init için -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
-  // Eğer kullanıcı zaten giriş yapmışsa direkt CMS'e gönder
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', user => {
       if (user) window.location.href = '/admin/';
+    });
+    window.netlifyIdentity.on('login', () => {
+      window.location.href = '/admin/';
     });
   }
 </script>
