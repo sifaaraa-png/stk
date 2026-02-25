@@ -240,6 +240,7 @@ permalink: "/blog-yazi-detay.html"
     link.addEventListener("click",function(e){
       if(window.innerWidth<=992){
         e.preventDefault();e.stopPropagation();
+        if(link._animating)return;link._animating=true;setTimeout(function(){link._animating=false;},280);
         var p=this.parentElement,wasOpen=p.classList.contains("open");
         document.querySelectorAll(".main-nav .dropdown").forEach(function(d){d.classList.remove("open");});
         if(!wasOpen)p.classList.add("open");

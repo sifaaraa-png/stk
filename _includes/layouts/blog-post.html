@@ -130,7 +130,7 @@
             <div class="footer-col"><p><strong>İletişim</strong></p>
                 <p><i class="fas fa-map-marker-alt"></i> {{ site.address | default("Ümraniye, İstanbul") }}</p>
                 <p><i class="fas fa-phone"></i> {{ site.phone | default("+90 534 705 42 34") }}</p>
-                <p><i class="fas fa-envelope"></i> {{ site.email | default("info@shdanismanlik.com") }}</p>
+                <p><i class="fas fa-envelope"></i> {{ site.email | default("<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274e49414867544f4346494e544a46494b4e4c0944484a">[email&#160;protected]</a>") }}</p>
             </div>
             <div class="footer-col"><p><strong>Takip Edin</strong></p>
                 <div class="social-icons">
@@ -151,7 +151,7 @@
     <div class="wa-icon"><i class="fab fa-whatsapp"></i></div>
 </a>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 (function(){
   var overlay=document.getElementById('navOverlay'),openBtn=document.getElementById('navOpenBtn'),closeBtn=document.getElementById('navCloseBtn'),nav=document.getElementById('mainNav');
   if(!overlay||!openBtn||!closeBtn||!nav)return;
@@ -166,13 +166,5 @@
     link.addEventListener('click',function(e){
       if(window.innerWidth<=992){
         e.preventDefault();e.stopPropagation();
-        var p=this.parentElement,wasOpen=p.classList.contains('open');
-        document.querySelectorAll('.main-nav .dropdown').forEach(function(d){d.classList.remove('open');});
-        if(!wasOpen)p.classList.add('open');
-      }
-    });
-  });
-})();
-</script>
-</body>
-</html>
+        if(link._animating)return;link._animating=true;setTimeout(function(){link._animating=false;},280);
+        var p=this.parentElement,wasOpen=p.c

@@ -858,12 +858,13 @@ main {
   .main-nav > ul > li > a i.fa-chevron-down {
     font-size: 12px !important;
     color: rgba(255,255,255,0.3) !important;
-    transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), color 0.22s ease !important;
+    transition: transform 0.25s ease, color 0.2s ease !important;
     flex-shrink: 0 !important;
     float: none !important;
     margin-top: 0 !important;
+    pointer-events: none !important;
   }
-  .main-nav .dropdown > a i { float: none; margin-top: 0; }
+  .main-nav .dropdown > a i { float: none; margin-top: 0; pointer-events: none; }
   .main-nav .dropdown.open > a i { transform: rotate(0deg); }
   .main-nav > ul > li.dropdown.open > a i.fa-chevron-down {
     transform: rotate(180deg) !important;
@@ -884,7 +885,7 @@ main {
     min-width: unset !important;
     max-height: 0 !important;
     overflow: hidden !important;
-    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1) !important;
+    transition: max-height 0.28s ease !important;
     background: rgba(0,0,0,0.22) !important;
     margin: 0 !important;
     border: none !important;

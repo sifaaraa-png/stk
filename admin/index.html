@@ -404,6 +404,8 @@
         <span class="badge-dot"></span>
         Sistem Aktif
       </div>
+      <a href="https://www.netlifycms.org" target="_blank" class="netlify-badge">Netlify CMS ile çalışır</a>
+    </div>
   </div>
 
   <span class="side-text side-text-r">STK · Dernek · Vakıf Danışmanlığı</span>
@@ -422,7 +424,7 @@
     eyeIcon.innerHTML = show ? eyeClosed : eyeOpen;
   });
 
-  /* Form submit → Netlify Identity */
+  /* Form submit → Netlify Identity GoTrue direct API */
   const form = document.getElementById('loginForm');
   const btn  = document.getElementById('loginBtn');
   const err  = document.getElementById('errorMsg');
@@ -436,15 +438,31 @@
     const password = document.getElementById('password').value;
 
     try {
-      /* Netlify Identity widget is loaded via the /admin/ route automatically.
-         If you have netlify-identity-widget.js loaded, use window.netlifyIdentity.
-         Otherwise forward to the CMS directly: */
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.login({ email, password });
+      // GoTrue API ile doğrudan giriş
+      const siteUrl = window.location.origin;
+      const res = await fetch(`${siteUrl}/.netlify/identity/token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `grant_type=password&username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+      });
+
+      if (!res.ok) throw new Error('Auth failed');
+
+      const data = await res.json();
+      if (data.access_token) {
+        // Token'ı sakla, CMS'e yönlendir
+        localStorage.setItem('gotrue.access-token', data.access_token);
+        localStorage.setItem('gotrue.refresh-token', data.refresh_token || '');
+        // Netlify Identity widget token formatı
+        const userKey = 'gotrue.user';
+        localStorage.setItem(userKey, JSON.stringify({
+          access_token: data.access_token,
+          refresh_token: data.refresh_token,
+          expires_at: Math.round(Date.now() / 1000) + (data.expires_in || 3600)
+        }));
+        window.location.href = '/admin/';
       } else {
-        /* Fallback: redirect to CMS admin with Netlify Identity */
-        await new Promise(r => setTimeout(r, 1200));
-        window.location.href = '/admin/#';
+        throw new Error('No token');
       }
     } catch {
       btn.classList.remove('loading');
@@ -459,12 +477,10 @@
 <!-- Netlify Identity Widget -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
+  // Eğer kullanıcı zaten giriş yapmışsa direkt CMS'e gönder
   if (window.netlifyIdentity) {
     window.netlifyIdentity.on('init', user => {
-      if (user) window.location.href = '/admin/#';
-    });
-    window.netlifyIdentity.on('login', () => {
-      window.location.href = '/admin/#';
+      if (user) window.location.href = '/admin/';
     });
   }
 </script>
