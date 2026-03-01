@@ -14,7 +14,6 @@
       min-height: 100vh;
     }
 
-    /* ── Giriş ekranı overlay ── */
     #login-overlay {
       position: fixed;
       inset: 0;
@@ -70,9 +69,7 @@
       transition: border-color .2s;
     }
 
-    .login-card input:focus {
-      border-color: #1a3a5c;
-    }
+    .login-card input:focus { border-color: #1a3a5c; }
 
     .login-btn {
       width: 100%;
@@ -84,11 +81,9 @@
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      letter-spacing: 0.4px;
       transition: opacity .2s;
       margin-top: 4px;
     }
-
     .login-btn:hover { opacity: 0.9; }
     .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -105,18 +100,8 @@
       color: #94a3b8;
     }
 
-    /* Decap CMS gizle – giriş tamamlanana kadar */
     #nc-root { display: none; }
 
-    /* Decap header içindeki logo/marka alanlarını gizle */
-    [class*="AppHeaderContent"] img[alt="Decap CMS"],
-    [class*="AppHeaderContent"] img[alt="Netlify CMS"],
-    a[href*="decapcms.org"],
-    a[href*="netlifycms.org"] {
-      display: none !important;
-    }
-
-    /* Header rengi */
     [class*="AppHeader"] {
       background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 100%) !important;
     }
@@ -124,13 +109,9 @@
     [class*="ToolbarButton"] { color: #1a3a5c !important; }
     [class*="ToolbarButton"]:hover { background: #e8f0fe !important; }
   </style>
-
-  <!-- Netlify Identity Widget (arka planda çalışır, UI'sı kullanılmıyor) -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
-  <!-- ── Özel Giriş Ekranı ── -->
   <div id="login-overlay">
     <div class="login-card">
       <img src="/logo.webp" alt="SH STK Danışmanlık" />
@@ -143,24 +124,34 @@
       <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
 
       <button class="login-btn" id="login-btn" onclick="doLogin()">Giriş Yap</button>
-      <div id="login-error">E-posta veya şifre hatalı. Lütfen tekrar deneyin.</div>
+      <div id="login-error"></div>
 
       <div class="login-footer">SH STK Danışmanlık &copy; 2025</div>
     </div>
   </div>
 
-  <!-- Decap CMS buraya render eder -->
   <div id="nc-root"></div>
 
+  <!-- GoTrue JS: gerçek email/password login -->
+  <script src="https://cdn.jsdelivr.net/npm/gotrue-js@0.9.29/lib/index.umd.js"></script>
+
   <script>
-    // Netlify Identity nesnesini hazırla (popup UI olmadan)
-    window.netlifyIdentity && window.netlifyIdentity.init({ container: '#__hidden' });
+    var auth = new GoTrue({
+      APIUrl: window.location.origin + "/.netlify/identity",
+      audience: "",
+      setCookie: true,
+    });
+
+    function showCMS() {
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('nc-root').style.display = 'block';
+    }
 
     function doLogin() {
-      const btn   = document.getElementById('login-btn');
-      const email = document.getElementById('email').value.trim();
-      const pass  = document.getElementById('password').value;
-      const errEl = document.getElementById('login-error');
+      var btn   = document.getElementById('login-btn');
+      var email = document.getElementById('email').value.trim();
+      var pass  = document.getElementById('password').value;
+      var errEl = document.getElementById('login-error');
 
       if (!email || !pass) {
         errEl.textContent = 'Lütfen e-posta ve şifrenizi girin.';
@@ -172,36 +163,30 @@
       btn.textContent = 'Giriş yapılıyor…';
       errEl.style.display = 'none';
 
-      // Netlify Identity doğrudan login
-      window.netlifyIdentity.login(email, pass)
-        .then(function(user) {
-          // Başarılı giriş: overlay'i kaldır, CMS'i göster
-          document.getElementById('login-overlay').style.display = 'none';
-          document.getElementById('nc-root').style.display = 'block';
+      auth.login(email, pass, true)
+        .then(function() {
+          showCMS();
         })
         .catch(function(err) {
           btn.disabled = false;
           btn.textContent = 'Giriş Yap';
-          errEl.textContent = 'E-posta veya şifre hatalı. Lütfen tekrar deneyin.';
+          var msg = 'E-posta veya şifre hatalı.';
+          try { msg = err.json.error_description || err.json.msg || msg; } catch(e) {}
+          errEl.textContent = msg;
           errEl.style.display = 'block';
         });
     }
 
-    // Enter tuşu ile giriş
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && document.getElementById('login-overlay').style.display !== 'none') {
-        doLogin();
-      }
+      if (e.key === 'Enter') doLogin();
     });
 
-    // Zaten oturum açıksa direkt CMS'e al
-    window.netlifyIdentity && window.netlifyIdentity.on('init', function(user) {
-      if (user) {
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('nc-root').style.display = 'block';
-      }
-    });
+    // Zaten oturum açıksa direkt CMS
+    if (auth.currentUser()) showCMS();
   </script>
+
+  <!-- Netlify Identity widget: Decap'ın token yönetimi için gerekli -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <!-- Decap CMS -->
   <script src="https://cdn.jsdelivr.net/npm/decap-cms@^3.0.0/dist/decap-cms.js"></script>
