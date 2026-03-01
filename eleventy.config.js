@@ -10,16 +10,11 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("logo.webp");
   eleventyConfig.addPassthroughCopy("email-templates");
 
-  // Blog koleksiyonu — draft filtreli, tarihe göre sıralı
+  // Blog koleksiyonu
   eleventyConfig.addCollection("blog", function(collectionApi) {
-    return collectionApi.getFilteredByGlob("content/blog/*.md")
-      .filter(function(item) {
-        // draft: true olanları çıkar
-        return !item.data.draft;
-      })
-      .sort(function(a, b) {
-        return new Date(b.date) - new Date(a.date);
-      });
+    return collectionApi.getFilteredByGlob("content/blog/*.md").sort(function(a, b) {
+      return b.date - a.date;
+    });
   });
 
   // Tarih formatı filtresi (Türkçe)
@@ -27,7 +22,6 @@ module.exports = function(eleventyConfig) {
     var months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
                    "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
     var d = new Date(date);
-    if (isNaN(d.getTime())) return "";
     return d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear();
   });
 

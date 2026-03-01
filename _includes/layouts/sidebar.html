@@ -98,8 +98,14 @@
         </div>
     </section>
 
-    <!-- CONTENT (Full Width - No Sidebar) -->
-    {{ content | safe }}
+    <!-- CONTENT AREA: main-content + sidebar yan yana -->
+    <section class="page-content">
+        <div class="container">
+            <div class="content-grid">
+                {{ content | safe }}
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer class="main-footer">
